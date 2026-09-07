@@ -1,5 +1,5 @@
 import "../../assets/css/Aluno/AlunoStyle.css";
-import FormUser from "../../components/Aluno/FormAluno"
+import FormUser from "../../components/Aluno/FormAluno";
 
 function CadastroAluno() {
   return (

@@ -1,0 +1,426 @@
+/* Ilustrações do painel verde: só aparecem no computador.
+   Todas as cores vêm dos tokens, então acompanham a paleta do projeto. */
+.ilustracao {
+  display: none;
+}
+
+.ilustracao__quadro {
+  fill: var(--cor-quadro-claro);
+  stroke: var(--cor-giz);
+  stroke-width: 3;
+}
+
+.ilustracao__traco {
+  stroke: var(--cor-giz);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.75;
+}
+
+.ilustracao__traco--suave {
+  opacity: 0.45;
+}
+
+.ilustracao__traco--destaque {
+  stroke: var(--cor-destaque);
+  opacity: 1;
+}
+
+.ilustracao__apoio {
+  stroke: var(--cor-giz);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.6;
+}
+
+.ilustracao__base {
+  fill: var(--cor-giz);
+  opacity: 0.85;
+}
+
+.ilustracao__pessoa {
+  fill: var(--cor-giz);
+}
+
+.ilustracao__membro {
+  fill: none;
+  stroke: var(--cor-giz);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.ilustracao__cabelo {
+  fill: var(--cor-destaque);
+}
+
+.ilustracao__fone-banda {
+  fill: none;
+  stroke: var(--cor-giz);
+  stroke-width: 4;
+}
+
+.ilustracao__fone-concha {
+  fill: var(--cor-quadro-claro);
+  stroke: var(--cor-giz);
+  stroke-width: 2;
+}
+
+.ilustracao__campo {
+  fill: none;
+  stroke: var(--cor-giz);
+  stroke-width: 2.5;
+  opacity: 0.75;
+}
+
+.ilustracao__botao {
+  fill: var(--cor-destaque);
+}
+
+.ilustracao__chave {
+  fill: none;
+  stroke: var(--cor-destaque);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.ilustracao__tela {
+  fill: var(--cor-quadro);
+  stroke: var(--cor-giz);
+  stroke-width: 2.5;
+}
+
+.ilustracao__barra {
+  stroke: var(--cor-giz);
+  stroke-width: 4;
+  stroke-linecap: round;
+  opacity: 0.45;
+}
+
+.ilustracao__barra--progresso {
+  stroke: var(--cor-destaque);
+  opacity: 1;
+}
+
+.ilustracao__caixa {
+  fill: none;
+  stroke: var(--cor-giz);
+  stroke-width: 2.5;
+}
+
+.ilustracao__caixa--suave {
+  opacity: 0.6;
+}
+
+.ilustracao__visto {
+  fill: none;
+  stroke: var(--cor-destaque);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ilustracao__texto-campo {
+  fill: none;
+  stroke: var(--cor-giz);
+  stroke-width: 3;
+  stroke-linecap: round;
+  opacity: 0.9;
+}
+
+.ilustracao__ponto {
+  fill: var(--cor-giz);
+}
+
+.ilustracao__selo {
+  fill: var(--cor-destaque);
+}
+
+.ilustracao__selo-visto {
+  fill: none;
+  stroke: var(--cor-quadro);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ilustracao__play {
+  fill: var(--cor-destaque);
+}
+
+.ilustracao__triangulo {
+  fill: var(--cor-quadro);
+}
+
+.ilustracao__livro {
+  fill: var(--cor-destaque);
+}
+
+.ilustracao__livro--claro {
+  fill: var(--cor-giz);
+  opacity: 0.7;
+}
+
+.ilustracao__giz {
+  fill: var(--cor-giz);
+}
+
+.ilustracao__giz--amarelo {
+  fill: var(--cor-destaque);
+}
+
+/* Animação da lousa (só na escolha de perfil). O estado normal dos elementos é o
+   final; a animação só define de onde eles partem, então sem animação (ou com
+   "reduzir movimento" ligado) a lousa aparece completa. Dura menos de 5 s e roda uma vez. */
+.ilustracao__escrita {
+  stroke-dasharray: 1;
+  animation: ilustracao-escrever 0.45s ease-out backwards;
+}
+
+.ilustracao__escrita--longa {
+  animation-duration: 1.4s;
+}
+
+.ilustracao__surge {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ilustracao-surgir 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) backwards;
+}
+
+.ilustracao__surge--esquerda {
+  transform-origin: left center;
+  animation-name: ilustracao-crescer;
+  animation-timing-function: ease-out;
+}
+
+.ilustracao__pulso {
+  fill: none;
+  stroke: var(--cor-destaque);
+  stroke-width: 3;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ilustracao-pulsar 0.8s ease-out 3.2s 2;
+}
+
+/* Braço do professor: gira a partir do ombro (74, 84, nas unidades do desenho) */
+.ilustracao__braco-apontando {
+  transform-origin: 74px 84px;
+  animation: ilustracao-apontar 3s ease-in-out 0.2s backwards;
+}
+
+/* Estudante: a mão gira a partir do ombro (110, 88) e a cabeça balança de leve */
+.ilustracao__mao-levantada {
+  transform-origin: 110px 88px;
+  animation: ilustracao-levantar-mao 2.9s ease-in-out 0.8s backwards;
+}
+
+.ilustracao__cabeca-ouvindo {
+  animation: ilustracao-balancar 0.5s ease-in-out 0.4s 3;
+}
+
+/* Login: texto digitado em degraus, pontinhos da senha, botão apertado e chave girando */
+.ilustracao__digitar {
+  stroke-dasharray: 1;
+  animation: ilustracao-digitar 0.8s steps(9, end) 0.7s backwards;
+}
+
+.ilustracao__ponto {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ilustracao-surgir 0.25s ease-out backwards;
+}
+
+.ilustracao__pontos .ilustracao__ponto:nth-child(1) {
+  animation-delay: 1.7s;
+}
+
+.ilustracao__pontos .ilustracao__ponto:nth-child(2) {
+  animation-delay: 1.85s;
+}
+
+.ilustracao__pontos .ilustracao__ponto:nth-child(3) {
+  animation-delay: 2s;
+}
+
+.ilustracao__pontos .ilustracao__ponto:nth-child(4) {
+  animation-delay: 2.15s;
+}
+
+.ilustracao__pontos .ilustracao__ponto:nth-child(5) {
+  animation-delay: 2.3s;
+}
+
+.ilustracao__apertar {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: ilustracao-apertar 0.35s ease-in-out 2.7s;
+}
+
+.ilustracao__chave-girando {
+  transform-origin: 204px 90px;
+  animation: ilustracao-girar-chave 0.7s ease-out 3s backwards;
+}
+
+.ilustracao__atraso-1 {
+  animation-delay: 0.2s;
+}
+
+.ilustracao__atraso-2 {
+  animation-delay: 0.5s;
+}
+
+.ilustracao__atraso-3 {
+  animation-delay: 0.8s;
+}
+
+.ilustracao__atraso-4 {
+  animation-delay: 1.15s;
+}
+
+.ilustracao__atraso-5 {
+  animation-delay: 1.5s;
+}
+
+.ilustracao__atraso-6 {
+  animation-delay: 1.85s;
+}
+
+.ilustracao__atraso-7 {
+  animation-delay: 2.2s;
+}
+
+.ilustracao__atraso-8 {
+  animation-delay: 2.7s;
+}
+
+.ilustracao__atraso-9 {
+  animation-delay: 3s;
+}
+
+@keyframes ilustracao-escrever {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+}
+
+@keyframes ilustracao-surgir {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+}
+
+@keyframes ilustracao-crescer {
+  from {
+    transform: scaleX(0);
+    opacity: 0;
+  }
+}
+
+@keyframes ilustracao-apontar {
+  0% {
+    transform: rotate(30deg);
+  }
+
+  20% {
+    transform: rotate(0deg);
+  }
+
+  45% {
+    transform: rotate(7deg);
+  }
+
+  70% {
+    transform: rotate(16deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes ilustracao-levantar-mao {
+  0% {
+    transform: rotate(100deg);
+  }
+
+  22% {
+    transform: rotate(-4deg);
+  }
+
+  34% {
+    transform: rotate(10deg);
+  }
+
+  46% {
+    transform: rotate(-8deg);
+  }
+
+  58% {
+    transform: rotate(10deg);
+  }
+
+  70% {
+    transform: rotate(-8deg);
+  }
+
+  82% {
+    transform: rotate(6deg);
+  }
+
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+@keyframes ilustracao-balancar {
+  50% {
+    transform: translateY(-1.5px);
+  }
+}
+
+@keyframes ilustracao-digitar {
+  from {
+    stroke-dashoffset: 1;
+    opacity: 0;
+  }
+}
+
+@keyframes ilustracao-apertar {
+  50% {
+    transform: scale(0.94);
+  }
+}
+
+@keyframes ilustracao-girar-chave {
+  from {
+    transform: rotate(-30deg);
+  }
+
+  60% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes ilustracao-pulsar {
+  from {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+
+/* Só aparece em telas largas e com altura suficiente para caber no painel */
+@media (min-width: 1024px) and (min-height: 520px) {
+  .ilustracao {
+    display: block;
+    width: 100%;
+    max-width: 22rem;
+    height: auto;
+  }
+}

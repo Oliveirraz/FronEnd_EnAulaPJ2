@@ -1,0 +1,89 @@
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+}
+
+.campo__rotulo {
+  font-weight: 700;
+}
+
+.campo__controle {
+  width: 100%;
+  min-height: var(--alvo-toque);
+  padding: var(--espaco-2) var(--espaco-3);
+  font: inherit; /* 16px: evita o zoom automático de campos no iPhone */
+  color: var(--cor-tinta);
+  background-color: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.campo__controle::placeholder {
+  color: var(--cor-tinta-suave);
+}
+
+.campo__controle:hover {
+  border-color: var(--cor-tinta-suave);
+}
+
+.campo__controle[aria-invalid='true'] {
+  border-color: var(--cor-erro);
+}
+
+.campo__erro {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--cor-erro);
+}
+
+/* Botão dentro do campo (ex.: mostrar senha) */
+.campo__caixa {
+  position: relative;
+}
+
+.campo__controle--com-acao {
+  padding-right: calc(var(--alvo-toque) + var(--espaco-1));
+}
+
+.campo__acao {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: grid;
+  place-items: center;
+  width: var(--alvo-toque);
+  padding: 0;
+  color: var(--cor-quadro);
+  background: none;
+  border: 0;
+  border-radius: 0 var(--raio) var(--raio) 0;
+  cursor: pointer;
+}
+
+.campo__acao:hover {
+  background-color: var(--cor-giz);
+}
+
+/* Ícone decorativo dentro do campo, à esquerda */
+.campo__icone {
+  position: absolute;
+  top: 50%;
+  left: var(--espaco-3);
+  color: var(--cor-tinta-suave);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+.campo__controle--com-icone {
+  padding-left: calc(var(--espaco-3) + 1.25rem + var(--espaco-2));
+}
+
+.campo__caixa:focus-within .campo__icone {
+  color: var(--cor-quadro);
+}
+
+.campo__controle[aria-invalid='true'] ~ .campo__icone {
+  color: var(--cor-erro);
+}

@@ -1,0 +1,35 @@
+.cabecalho-tela {
+  margin-bottom: var(--espaco-6);
+}
+
+.cabecalho-tela__selo {
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  margin-bottom: var(--espaco-4);
+  color: var(--cor-quadro);
+  background-color: var(--cor-giz);
+  border-radius: 50%;
+}
+
+.cabecalho-tela__titulo {
+  margin-bottom: var(--espaco-2);
+  font-size: var(--texto-grande);
+}
+
+.cabecalho-tela__subtitulo {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+@media (min-width: 600px) {
+  .cabecalho-tela__selo {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .cabecalho-tela__titulo {
+    font-size: var(--texto-titulo);
+  }
+}

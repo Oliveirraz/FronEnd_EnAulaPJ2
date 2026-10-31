@@ -1,0 +1,68 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fonte-base);
+  font-size: var(--texto-base);
+  line-height: var(--altura-linha-texto);
+  color: var(--cor-tinta);
+  background: var(--cor-papel);
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 var(--espaco-2);
+  line-height: var(--altura-linha-titulo);
+}
+
+h1 { font-size: var(--texto-grande); }
+h2 { font-size: var(--texto-medio); }
+
+p {
+  margin: 0 0 var(--espaco-4);
+}
+
+a {
+  color: var(--cor-quadro);
+  font-weight: 700;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Foco visível para quem navega pelo teclado */
+:focus-visible {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* Sobre fundo escuro, o foco passa a ser amarelo */
+.fundo-quadro {
+  color: var(--cor-giz);
+  background: var(--cor-quadro);
+}
+
+.fundo-quadro :focus-visible {
+  outline-color: var(--cor-destaque);
+}
+
+/* Respeita quem prefere menos movimento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

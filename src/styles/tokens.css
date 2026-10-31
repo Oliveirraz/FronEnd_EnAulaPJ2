@@ -1,0 +1,48 @@
+/*
+  Pontos de quebra (media queries não aceitam variáveis CSS):
+    tablet:   min-width: 600px
+    desktop:  min-width: 1024px
+    telão:    min-width: 1440px
+*/
+:root {
+    /* Cores */
+  --cor-quadro: #33286b;
+  --cor-quadro-claro: #46398a;
+  --cor-giz: #eeebfa;
+  --cor-destaque: #4fd1b5;
+  --cor-papel: #faf9fd;
+  --cor-superficie: #ffffff;
+  --cor-tinta: #1b1630;
+  --cor-tinta-suave: #5a5272;
+  --cor-borda: #756c92;
+  --cor-erro: #b3261e;
+
+  /* Foco do teclado: cor escura sobre fundo claro */
+  --cor-foco: var(--cor-quadro);
+
+  /* Tipografia */
+  --fonte-base: 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --texto-pequeno: 0.875rem; /* 14px */
+  --texto-base: 1rem; /* 16px */
+  --texto-medio: 1.25rem; /* 20px */
+  --texto-grande: 1.5625rem; /* 25px */
+  --texto-titulo: 1.9375rem; /* 31px */
+  --altura-linha-texto: 1.5;
+  --altura-linha-titulo: 1.2;
+
+  /* Espaçamentos (base de 4px) */
+  --espaco-1: 0.25rem;
+  --espaco-2: 0.5rem;
+  --espaco-3: 0.75rem;
+  --espaco-4: 1rem;
+  --espaco-6: 1.5rem;
+  --espaco-8: 2rem;
+  --espaco-12: 3rem;
+
+  /* Formas */
+  --raio: 0.5rem;
+  --borda: 1px solid var(--cor-borda);
+
+  /* Tamanho mínimo de alvos de toque */
+  --alvo-toque: 2.75rem; /* 44px */
+}

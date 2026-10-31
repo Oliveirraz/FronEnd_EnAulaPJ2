@@ -1,0 +1,9 @@
+.inicio-provisorio {
+  display: grid;
+  gap: var(--espaco-4);
+  justify-items: start;
+  width: 100%;
+  max-width: 35rem;
+  margin: 0 auto;
+  padding: var(--espaco-8) var(--espaco-4);
+}

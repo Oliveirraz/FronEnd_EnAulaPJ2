@@ -1,0 +1,92 @@
+.grupo-opcoes {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.grupo-opcoes__legenda {
+  padding: 0;
+  margin-bottom: var(--espaco-1);
+  font-weight: 700;
+}
+
+.grupo-opcoes__lista {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-3);
+}
+
+.grupo-opcoes__opcao {
+  position: relative;
+  display: block;
+  cursor: pointer;
+}
+
+/* O botão de opção real fica escondido só visualmente: continua
+   focável e navegável pelo teclado e pelo leitor de tela. */
+.grupo-opcoes__entrada {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  border: 0;
+  clip-path: inset(50%);
+}
+
+.grupo-opcoes__cartao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: var(--alvo-toque);
+  padding: var(--espaco-3) var(--espaco-2);
+  text-align: center;
+  background-color: var(--cor-superficie);
+  border: 2px solid var(--cor-borda);
+  border-radius: var(--raio);
+  transition: border-color 0.15s, transform 0.1s;
+}
+
+.grupo-opcoes__opcao:hover .grupo-opcoes__cartao {
+  border-color: var(--cor-quadro);
+}
+
+.grupo-opcoes__opcao:active .grupo-opcoes__cartao {
+  transform: translateY(1px);
+}
+
+.grupo-opcoes__icone {
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  color: var(--cor-quadro);
+  background-color: var(--cor-giz);
+  border-radius: 50%;
+}
+
+.grupo-opcoes__texto {
+  font-weight: 700;
+}
+
+/* Opção marcada: borda escura, barra amarela e ícone invertido */
+.grupo-opcoes__entrada:checked + .grupo-opcoes__cartao {
+  border-color: var(--cor-quadro);
+  box-shadow: inset 0 -4px 0 var(--cor-destaque);
+}
+
+.grupo-opcoes__entrada:checked + .grupo-opcoes__cartao .grupo-opcoes__icone {
+  color: var(--cor-giz);
+  background-color: var(--cor-quadro);
+}
+
+.grupo-opcoes__entrada:focus-visible + .grupo-opcoes__cartao {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 2px;
+}

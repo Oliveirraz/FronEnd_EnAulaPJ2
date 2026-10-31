@@ -1,0 +1,12 @@
+.cadastro__voltar {
+  display: inline-flex;
+  gap: var(--espaco-2);
+  align-items: center;
+  min-height: var(--alvo-toque);
+  margin-bottom: var(--espaco-2);
+  text-decoration: none;
+}
+
+.cadastro__voltar:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,112 @@
+.upload-foto {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-4);
+}
+
+/* Atalho para mouse e toque: abre o seletor de arquivo */
+.upload-foto__avatar {
+  position: relative;
+  display: block;
+  flex: none;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.upload-foto__previa {
+  display: grid;
+  place-items: center;
+  width: 5.5rem;
+  height: 5.5rem;
+  overflow: hidden;
+  color: var(--cor-tinta-suave);
+  background-color: var(--cor-giz);
+  border: var(--borda);
+  border-radius: 50%;
+}
+
+.upload-foto__previa img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.upload-foto__camera {
+  position: absolute;
+  right: -0.125rem;
+  bottom: -0.125rem;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--cor-giz);
+  background-color: var(--cor-quadro);
+  border: 2px solid var(--cor-papel);
+  border-radius: 50%;
+}
+
+.upload-foto__corpo {
+  display: flex;
+  flex: 1 1 12rem;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  min-width: 0;
+}
+
+.upload-foto__rotulo {
+  font-weight: 700;
+}
+
+.upload-foto__entrada {
+  max-width: 100%;
+  font: inherit;
+  font-size: var(--texto-pequeno);
+}
+
+/* Botão "Escolher arquivo" do navegador, com a cara do projeto */
+.upload-foto__entrada::file-selector-button {
+  min-height: var(--alvo-toque);
+  margin-right: var(--espaco-3);
+  padding: var(--espaco-2) var(--espaco-4);
+  font: inherit;
+  font-weight: 700;
+  color: var(--cor-quadro);
+  background-color: var(--cor-superficie);
+  border: 1px solid var(--cor-quadro);
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.upload-foto__entrada::file-selector-button:hover {
+  background-color: var(--cor-giz);
+}
+
+.upload-foto__ajuda {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--cor-tinta-suave);
+}
+
+.upload-foto__erro {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--cor-erro);
+}
+
+.upload-foto__remover {
+  align-self: flex-start;
+  min-height: var(--alvo-toque);
+  padding: 0;
+  font: inherit;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  color: var(--cor-quadro);
+  text-decoration: underline;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}

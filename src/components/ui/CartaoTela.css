@@ -1,0 +1,9 @@
+/* Celular: sem cartão, para aproveitar a largura da tela */
+@media (min-width: 600px) {
+  .cartao-tela {
+    padding: var(--espaco-8);
+    background-color: var(--cor-superficie);
+    border: var(--borda);
+    border-radius: calc(var(--raio) * 1.5);
+  }
+}

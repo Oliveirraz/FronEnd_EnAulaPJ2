@@ -1,0 +1,197 @@
+/* Mobile first: faixa colorida no topo e conteúdo abaixo */
+.layout-autenticacao {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.layout-autenticacao__painel {
+  padding: var(--espaco-4);
+  border-bottom: 4px solid var(--cor-destaque);
+}
+
+.layout-autenticacao__frase {
+  display: none;
+  margin: var(--espaco-2) 0 0;
+}
+
+/* Área do conteúdo: ocupa todo o resto da tela e carrega o fundo com as formas.
+   Em coluna (celular e tablet) ela cresce com o conteúdo (flex-basis auto, sem encolher);
+   se encolhesse, o overflow cortaria o final do formulário. */
+.layout-autenticacao__area {
+  position: relative;
+  display: flex;
+  flex: 1 0 auto;
+  justify-content: center;
+  overflow: hidden;
+  background-color: var(--cor-papel);
+}
+
+.layout-autenticacao__conteudo {
+  position: relative;
+  flex: 1 1 0;
+  width: 100%;
+  max-width: 35rem;
+  margin: 0 auto;
+  padding: var(--espaco-6) var(--espaco-4) var(--espaco-8);
+}
+
+/* Formas suaves do fundo: círculos em menta e índigo bem claros */
+.layout-autenticacao__formas {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.layout-autenticacao__forma {
+  position: absolute;
+  border-radius: 50%;
+}
+
+.layout-autenticacao__forma--grande {
+  top: -2rem;
+  right: -2rem;
+  width: 6rem;
+  height: 6rem;
+  background-color: color-mix(in srgb, var(--cor-destaque) 28%, transparent);
+}
+
+.layout-autenticacao__forma--media {
+  bottom: -2.5rem;
+  left: -2rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  background-color: color-mix(in srgb, var(--cor-quadro) 9%, transparent);
+}
+
+.layout-autenticacao__forma--anel {
+  right: 1.25rem;
+  bottom: 0.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 3px solid color-mix(in srgb, var(--cor-destaque) 70%, transparent);
+}
+
+.layout-autenticacao__forma--ponto {
+  display: none;
+  top: 1.5rem;
+  left: 1.5rem;
+  width: 0.625rem;
+  height: 0.625rem;
+  background-color: color-mix(in srgb, var(--cor-quadro) 25%, transparent);
+}
+
+/* Entrada suave de cada tela (desligada para quem pede menos movimento) */
+.layout-autenticacao__pagina {
+  animation: entrada-tela 0.25s ease-out;
+}
+
+@keyframes entrada-tela {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Tablet: a faixa ganha a frase de apoio, o fundo fica lilás e as formas crescem */
+@media (min-width: 600px) {
+  .layout-autenticacao__painel {
+    padding: var(--espaco-6);
+  }
+
+  .layout-autenticacao__frase {
+    display: block;
+  }
+
+  .layout-autenticacao__area {
+    background-color: var(--cor-giz);
+  }
+
+  .layout-autenticacao__conteudo {
+    padding-top: var(--espaco-8);
+  }
+
+  .layout-autenticacao__forma--grande {
+    top: -3rem;
+    right: -3rem;
+    width: 9.5rem;
+    height: 9.5rem;
+  }
+
+  .layout-autenticacao__forma--media {
+    bottom: -3rem;
+    left: -2.5rem;
+    width: 8rem;
+    height: 8rem;
+  }
+
+  .layout-autenticacao__forma--ponto {
+    display: block;
+  }
+}
+
+/* Computador: o painel vira uma coluna ao lado do conteúdo */
+@media (min-width: 1024px) {
+  .layout-autenticacao {
+    flex-direction: row;
+  }
+
+  /* O painel tem a altura da tela e fica parado enquanto o conteúdo rola,
+     então a marca e a ilustração aparecem sempre, sem precisar rolar. */
+  .layout-autenticacao__painel {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex: 0 0 40%;
+    flex-direction: column;
+    gap: var(--espaco-12);
+    align-self: flex-start;
+    justify-content: flex-start;
+    height: 100dvh;
+    padding: var(--espaco-12);
+    overflow-y: auto;
+    border-bottom: 0;
+  }
+
+  .layout-autenticacao__painel .marca__selo {
+    width: 2.25rem;
+    height: 2.25rem;
+    font-size: var(--texto-medio);
+  }
+
+  .layout-autenticacao__painel .marca__nome {
+    font-size: var(--texto-grande);
+  }
+
+  .layout-autenticacao__frase {
+    max-width: 22rem;
+    margin-top: var(--espaco-4);
+    font-size: var(--texto-medio);
+  }
+
+  .layout-autenticacao__area {
+    flex: 1 1 0;
+  }
+
+  .layout-autenticacao__conteudo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--espaco-12) var(--espaco-8);
+  }
+
+  .layout-autenticacao__forma--grande {
+    width: 11rem;
+    height: 11rem;
+  }
+
+  .layout-autenticacao__forma--media {
+    width: 9rem;
+    height: 9rem;
+  }
+}

@@ -16,7 +16,10 @@ export default function CamposComuns({ register, errors, getValues }) {
           required: 'Informe seu nome.',
           validate: (valor) =>
             valor.trim().length >= 3 || 'O nome deve ter no mínimo 3 caracteres.',
-          maxLength: { value: 100, message: 'O nome deve ter no máximo 100 caracteres.' },
+          maxLength: {
+            value: 100,
+            message: 'O nome deve ter no máximo 100 caracteres.',
+          },
         })}
       />
 
@@ -36,13 +39,16 @@ export default function CamposComuns({ register, errors, getValues }) {
         })}
       />
 
-            <InputSenha
+      <InputSenha
         rotulo="Senha"
         autoComplete="new-password"
         erro={errors.senha?.message}
         {...register('senha', {
           required: 'Crie uma senha.',
-          minLength: { value: 3, message: 'A senha deve ter no mínimo 3 caracteres.' },
+          minLength: {
+            value: 3,
+            message: 'A senha deve ter no mínimo 3 caracteres.',
+          },
         })}
       />
 
@@ -52,18 +58,8 @@ export default function CamposComuns({ register, errors, getValues }) {
         erro={errors.confirmarSenha?.message}
         {...register('confirmarSenha', {
           required: 'Repita a senha.',
-          validate: (valor) => valor === getValues('senha') || 'As senhas não coincidem.',
-        })}
-      />
-
-      <Input
-        rotulo="Confirmar senha"
-        type="password"
-        autoComplete="new-password"
-        erro={errors.confirmarSenha?.message}
-        {...register('confirmarSenha', {
-          required: 'Repita a senha.',
-          validate: (valor) => valor === getValues('senha') || 'As senhas não coincidem.',
+          validate: (valor) =>
+            valor === getValues('senha') || 'As senhas não coincidem.',
         })}
       />
     </>

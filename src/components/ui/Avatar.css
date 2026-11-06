@@ -1,0 +1,17 @@
+.avatar {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  overflow: hidden;
+  color: var(--cor-quadro);
+  background-color: var(--cor-giz);
+  border-radius: 50%;
+}
+
+.avatar__imagem {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

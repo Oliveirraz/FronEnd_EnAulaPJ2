@@ -1,4 +1,4 @@
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import Button from '../../components/ui/Button.jsx'
 import { lerSessao, limparSessao } from '../../services/sessao.js'
 import './InicioPage.css'
@@ -21,6 +21,7 @@ export default function InicioPage() {
       <title>Início | EnAula</title>
       <h1>Olá, {sessao.nome}!</h1>
       <p>Você entrou como {sessao.tipo === 'PROFESSOR' ? 'professor' : 'aluno'}.</p>
+      {sessao.tipo === 'PROFESSOR' && <Link to="/perfil">Meu perfil</Link>}
       <Button onClick={sair}>Sair</Button>
     </main>
   )

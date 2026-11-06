@@ -22,12 +22,14 @@
   border-color: var(--cor-erro);
 }
 
-.aviso--sucesso {
+.aviso--sucesso,
+.aviso--info {
   color: var(--cor-tinta);
   background-color: var(--cor-giz);
   border-color: var(--cor-quadro);
 }
 
-.aviso--sucesso .aviso__icone {
+.aviso--sucesso .aviso__icone,
+.aviso--info .aviso__icone {
   color: var(--cor-quadro);
 }

@@ -1,0 +1,164 @@
+/* Mobile first: faixa do perfil no topo e conteúdo abaixo */
+.layout-perfil {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.layout-perfil__painel {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--espaco-3) var(--espaco-4);
+  align-items: center;
+  padding: var(--espaco-4);
+  border-bottom: 4px solid var(--cor-destaque);
+}
+
+.layout-perfil__identidade {
+  min-width: 0;
+}
+
+.layout-perfil__nome {
+  margin: 0;
+  font-size: var(--texto-medio);
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.layout-perfil__tipo {
+  margin: var(--espaco-1) 0;
+}
+
+.layout-perfil__selo {
+  display: inline-block;
+  padding: 0 var(--espaco-2);
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  color: var(--cor-quadro);
+  background-color: var(--cor-destaque);
+  border-radius: 0.375rem;
+}
+
+.layout-perfil__email {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  overflow-wrap: break-word;
+}
+
+/* Resumo (titulação e valor): aparece só no computador, onde o painel é uma coluna.
+   Nas telas menores, os mesmos dados estão na aba "Dados". */
+.layout-perfil__resumo {
+  display: none;
+  gap: var(--espaco-2);
+  padding: 0;
+  margin: var(--espaco-4) 0 0;
+  list-style: none;
+}
+
+.layout-perfil__resumo li {
+  display: flex;
+  gap: var(--espaco-2);
+  align-items: center;
+}
+
+/* O botão "Sair" fica compacto na faixa (a regra mais específica vence a de .botao) */
+.layout-perfil__painel .layout-perfil__sair {
+  width: auto;
+  min-width: 0;
+  padding-inline: var(--espaco-3);
+}
+
+/* Em telas bem estreitas, o botão "Sair" mostra só o ícone (o texto continua para leitores de tela) */
+@media (max-width: 399px) {
+  .layout-perfil__sair-texto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
+  }
+}
+
+/* Em coluna, a área cresce com o conteúdo (sem encolher) */
+.layout-perfil__area {
+  flex: 1 0 auto;
+  background-color: var(--cor-papel);
+}
+
+.layout-perfil__miolo {
+  width: 100%;
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: var(--espaco-4) var(--espaco-4) var(--espaco-8);
+}
+
+@media (min-width: 600px) {
+  .layout-perfil__painel {
+    padding: var(--espaco-6);
+  }
+
+  .layout-perfil__area {
+    background-color: var(--cor-giz);
+  }
+
+  .layout-perfil__miolo {
+    padding-top: var(--espaco-6);
+  }
+}
+
+/* Computador: o painel do perfil vira uma coluna fixa à esquerda */
+@media (min-width: 1024px) {
+  .layout-perfil {
+    flex-direction: row;
+  }
+
+  .layout-perfil__painel {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex: 0 0 22rem;
+    flex-direction: column;
+    gap: var(--espaco-4);
+    align-items: flex-start;
+    align-self: flex-start;
+    height: 100dvh;
+    padding: var(--espaco-12) var(--espaco-8);
+    overflow-y: auto;
+    border-bottom: 0;
+  }
+
+  .layout-perfil__painel .avatar {
+    width: 6rem;
+    height: 6rem;
+  }
+
+  .layout-perfil__identidade {
+    flex: 1 1 auto;
+  }
+
+  .layout-perfil__nome {
+    font-size: var(--texto-grande);
+  }
+
+  .layout-perfil__email {
+    font-size: var(--texto-base);
+  }
+
+    .layout-perfil__resumo {
+    display: grid;
+  }
+
+  .layout-perfil__painel .layout-perfil__sair {
+    width: 100%;
+  }
+
+  .layout-perfil__area {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .layout-perfil__miolo {
+    padding: var(--espaco-12) var(--espaco-8);
+  }
+}

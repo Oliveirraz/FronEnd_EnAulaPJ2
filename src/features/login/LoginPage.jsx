@@ -13,6 +13,12 @@ export default function LoginPage() {
     <>
       <title>Login | EnAula</title>
       <CartaoTela>
+        {state?.sessaoExpirada && (
+          <div className="login__aviso">
+            <Aviso tipo="info">Sua sessão expirou. Entre novamente para continuar.</Aviso>
+          </div>
+        )}
+
         {state?.cadastroConcluido && (
           <div className="login__aviso">
             <Aviso tipo="sucesso">Cadastro concluído! Agora você já pode entrar.</Aviso>

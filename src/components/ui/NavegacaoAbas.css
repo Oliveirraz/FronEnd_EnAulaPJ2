@@ -1,0 +1,45 @@
+.abas {
+  display: flex;
+  gap: var(--espaco-3);
+  margin-bottom: var(--espaco-6);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.abas__link {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  min-height: var(--alvo-toque);
+  padding: 0;
+  margin-bottom: -1px;
+  font-weight: 700;
+  color: var(--cor-tinta-suave);
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+
+.abas__link:hover {
+  color: var(--cor-tinta);
+}
+
+/* Aba atual: texto escuro e sublinhado índigo (não depende só de cor) */
+.abas__link[aria-current='page'] {
+  color: var(--cor-tinta);
+  border-bottom-color: var(--cor-quadro);
+}
+
+@media (min-width: 600px) {
+  .abas {
+    gap: var(--espaco-4);
+  }
+
+  .abas__link {
+    padding: 0 var(--espaco-1);
+  }
+}
+
+/* O contorno de foco fica por dentro para não ser cortado pela rolagem horizontal */
+.abas__link:focus-visible {
+  outline-offset: -3px;
+}

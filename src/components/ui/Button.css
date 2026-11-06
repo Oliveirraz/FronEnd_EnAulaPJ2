@@ -24,6 +24,16 @@
   transform: translateY(1px);
 }
 
+.botao--contorno-claro {
+  color: var(--cor-giz);
+  background-color: transparent;
+  border: 2px solid var(--cor-giz);
+}
+
+.botao--contorno-aclaro:hover:not(:disabled) {
+  background-color: var(--cor-quadro-claro);
+}
+
 .botao:disabled {
   opacity: 0.65;
   cursor: not-allowed;

@@ -1,11 +1,12 @@
-import { IconAlertCircle, IconCircleCheck } from '@tabler/icons-react'
+import { IconAlertCircle, IconCircleCheck, IconInfoCircle } from '@tabler/icons-react'
 import './Aviso.css'
 
 // Mensagem de destaque com ícone. O ícone é decorativo: o sentido está no texto.
-// Erros usam role="alert" (lido na hora); sucessos usam role="status" (lido com calma).
+// Erros usam role="alert" (lido na hora); sucessos e informações usam role="status" (lido com calma).
 const TIPOS = {
   erro: { Icone: IconAlertCircle, role: 'alert' },
   sucesso: { Icone: IconCircleCheck, role: 'status' },
+  info: { Icone: IconInfoCircle, role: 'status' },
 }
 
 export default function Aviso({ tipo = 'erro', children }) {

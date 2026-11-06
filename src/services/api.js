@@ -1,3 +1,5 @@
+import { lerSessao } from './sessao.js'
+
 const API_URL = import.meta.env.VITE_API_URL ?? ''
 
 export class ApiError extends Error {
@@ -49,6 +51,36 @@ export async function entrar({ email, senha, tipo }) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, senha, tipo }),
   })
+
+  if (!resposta.ok) {
+    throw new ApiError(resposta.status, await lerMensagemDoServidor(resposta))
+  }
+  return resposta.json()
+}
+
+// Requisição a uma rota privada: envia o token do login no cabeçalho Authorization.
+// 401 ou 403 indicam token vencido ou recusado, e quem chama decide o que fazer.
+async function requisicaoAutenticada(caminho, opcoes = {}) {
+  const token = lerSessao()?.token
+  const resposta = await fetch(`${API_URL}${caminho}`, {
+    ...opcoes,
+    headers: { ...opcoes.headers, Authorization: `Bearer ${token}` },
+  })
+
+  if (!resposta.ok) {
+    throw new ApiError(resposta.status, await lerMensagemDoServidor(resposta))
+  }
+  return resposta.status === 204 ? null : resposta.json()
+}
+
+export function buscarProfessor(id) {
+  return requisicaoAutenticada(`/api/professores/${id}`)
+}
+
+// Valor mínimo da hora-aula de cada titulação. Rota pública: o cadastro do professor
+// acontece antes do login.
+export async function buscarTabelaPrecos() {
+  const resposta = await fetch(`${API_URL}/api/tabela-precos`)
 
   if (!resposta.ok) {
     throw new ApiError(resposta.status, await lerMensagemDoServidor(resposta))

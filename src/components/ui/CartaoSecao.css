@@ -1,0 +1,12 @@
+.cartao-secao__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--espaco-4);
+}
+
+.cartao-secao__titulo {
+  margin: 0;
+}

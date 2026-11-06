@@ -1,0 +1,23 @@
+.lista-dados {
+  display: grid;
+  gap: var(--espaco-4);
+  margin: 0;
+}
+
+.lista-dados__rotulo {
+  font-size: var(--texto-pequeno);
+  color: var(--cor-tinta-suave);
+}
+
+.lista-dados__valor {
+  margin: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 600px) {
+  .lista-dados {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--espaco-6) var(--espaco-4);
+  }
+}

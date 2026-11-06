@@ -87,3 +87,17 @@
 .campo__controle[aria-invalid='true'] ~ .campo__icone {
   color: var(--cor-erro);
 }
+
+/* Texto de apoio abaixo do campo */
+.campo__ajuda {
+  margin: 0;
+  font-size: var(--texto-pequeno);
+  color: var(--cor-tinta-suave);
+}
+
+/* Campo desabilitado (ainda não dá para preencher) */
+.campo__controle:disabled {
+  color: var(--cor-tinta-suave);
+  cursor: not-allowed;
+  background-color: var(--cor-giz);
+}

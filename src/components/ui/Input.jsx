@@ -2,10 +2,12 @@ import { useId } from 'react'
 import './Campo.css'
 
 // icone: ícone decorativo à esquerda, dentro do campo.
+// ajuda: texto de apoio abaixo do campo (ex.: valor mínimo).
 // acaoFinal: botão opcional à direita, dentro do campo (ex.: mostrar senha).
 export default function Input({
   rotulo,
   erro,
+  ajuda,
   icone: Icone,
   acaoFinal,
   className = '',
@@ -14,6 +16,8 @@ export default function Input({
 }) {
   const id = useId()
   const erroId = `${id}-erro`
+  const ajudaId = `${id}-ajuda`
+  const descritoPor = [erro && erroId, ajuda && ajudaId].filter(Boolean).join(' ') || undefined
   const classesDoControle = [
     'campo__controle',
     Icone && 'campo__controle--com-icone',
@@ -33,12 +37,17 @@ export default function Input({
           id={id}
           className={classesDoControle}
           aria-invalid={erro ? 'true' : undefined}
-          aria-describedby={erro ? erroId : undefined}
+          aria-describedby={descritoPor}
           {...props}
         />
         {Icone && <Icone className="campo__icone" size="1.25rem" aria-hidden="true" />}
         {acaoFinal}
       </div>
+      {ajuda && (
+        <p id={ajudaId} className="campo__ajuda">
+          {ajuda}
+        </p>
+      )}
       {erro && (
         <p id={erroId} className="campo__erro" role="alert">
           {erro}

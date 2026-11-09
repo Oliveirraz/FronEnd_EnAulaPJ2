@@ -15,6 +15,10 @@ import RotaProtegida from './routes/RotaProtegida.jsx'
 export default function App() {
   return (
     <Routes>
+      
+      {/* Tela inicial: redireciona para o login */}
+      <Route path="/" element={<Navigate to="/login" replace />} />
+
       {/* Rotas públicas */}
       <Route element={<LayoutAutenticacao />}>
         <Route path="/cadastro" element={<EscolhaPerfilPage />} />

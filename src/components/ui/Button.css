@@ -61,3 +61,13 @@
     min-width: 14rem;
   }
 }
+
+/* Botão para ações perigosas, como excluir uma conta. */
+.botao--perigo {
+  color: var(--cor-giz);
+  background-color: #b42318;
+}
+
+.botao--perigo:hover:not(:disabled) {
+  background-color: #912018;
+}

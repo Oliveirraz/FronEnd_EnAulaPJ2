@@ -1,3 +1,10 @@
 .perfil__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
   margin-top: var(--espaco-4);
+}
+
+.perfil__acoes .botao {
+  flex: 1;
 }

@@ -77,6 +77,22 @@ export function buscarProfessor(id) {
   return requisicaoAutenticada(`/api/professores/${id}`)
 }
 
+
+export function atualizarProfessor(id, dados) {
+  return requisicaoAutenticada(`/api/professores/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dados),
+  })
+}
+
+
+export function excluirProfessor(id) {
+  return requisicaoAutenticada(`/api/professores/${id}`, {
+    method: 'DELETE',
+  })
+}
+
 // Valor mínimo da hora-aula de cada titulação. Rota pública: o cadastro do professor
 // acontece antes do login.
 export async function buscarTabelaPrecos() {

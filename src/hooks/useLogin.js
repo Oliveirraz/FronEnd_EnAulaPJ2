@@ -35,10 +35,11 @@ export default function useLogin() {
       }
 
       // Direciona cada tipo de conta para sua respectiva tela.
+            // Direciona cada tipo de conta para sua respectiva tela.
       if (dados.tipo === 'PROFESSOR') {
         navigate('/perfil', { replace: true })
       } else {
-        navigate('/inicio', { replace: true })
+        navigate('/aluno/perfil', { replace: true })
       }
     } catch (erro) {
       setErroServidor(mensagemDeErro(erro))

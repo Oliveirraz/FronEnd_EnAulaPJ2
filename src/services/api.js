@@ -73,6 +73,10 @@ async function requisicaoAutenticada(caminho, opcoes = {}) {
   return resposta.status === 204 ? null : resposta.json()
 }
 
+export function buscarAluno(id) {
+  return requisicaoAutenticada(`/api/alunos/${id}`)
+}
+
 export function buscarProfessor(id) {
   return requisicaoAutenticada(`/api/professores/${id}`)
 }

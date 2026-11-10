@@ -11,6 +11,8 @@ import PerfilSegurancaPage from './features/perfil/PerfilSegurancaPage.jsx'
 import LayoutAutenticacao from './layouts/LayoutAutenticacao.jsx'
 import LayoutPerfil from './layouts/LayoutPerfil.jsx'
 import RotaProtegida from './routes/RotaProtegida.jsx'
+import LayoutPerfilAluno from './layouts/LayoutPerfilAluno.jsx'
+import PerfilAlunoDadosPage from './features/perfil/PerfilAlunoDadosPage.jsx'
 
 export default function App() {
   return (
@@ -40,6 +42,17 @@ export default function App() {
           <Route path="materias" element={<PerfilMateriasPage />} />
           <Route path="aulas" element={<PerfilAulasPage />} />
           <Route path="seguranca" element={<PerfilSegurancaPage />} />
+        </Route>
+      </Route>
+
+      {/* Perfil do aluno */}
+      <Route element={<RotaProtegida tipo="ALUNO" />}>
+        <Route path="/aluno/perfil" element={<LayoutPerfilAluno />}>
+          <Route index element={<Navigate to="dados" replace />} />
+          <Route path="dados" element={<PerfilAlunoDadosPage />} />
+          <Route path="aulas" element={<div>Aulas do aluno</div>} />
+          <Route path="materiais" element={<div>Materiais do aluno</div>} />
+          <Route path="seguranca" element={<div>Segurança do aluno</div>} />
         </Route>
       </Route>
 

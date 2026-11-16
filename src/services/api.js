@@ -150,3 +150,19 @@ export function excluirMateria(id) {
     method: 'DELETE',
   })
 }
+
+// =====================================================
+// AULAS - criação e listagem do professor logado
+// =====================================================
+
+export function listarAulas() {
+  return requisicaoAutenticada('/api/aulas')
+}
+
+export function cadastrarAula(dados) {
+  return requisicaoAutenticada('/api/aulas', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(dados),
+  })
+}

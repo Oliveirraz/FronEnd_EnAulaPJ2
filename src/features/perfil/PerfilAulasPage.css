@@ -1,0 +1,105 @@
+
+.perfil-aulas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-5);
+}
+
+.perfil-aulas__descricao {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.perfil-aulas__formulario,
+.perfil-aulas__listagem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4);
+}
+
+.perfil-aulas__formulario h3,
+.perfil-aulas__listagem h3 {
+  margin: 0;
+  font-size: var(--texto-base);
+}
+
+.perfil-aulas__campos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espaco-4);
+}
+
+.perfil-aulas__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+}
+
+.perfil-aulas__cabecalho-lista {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+}
+
+.perfil-aulas__quantidade {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.perfil-aulas__lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.perfil-aulas__item {
+  padding: var(--espaco-4);
+  background-color: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.perfil-aulas__informacoes h4 {
+  margin: 0 0 var(--espaco-2);
+}
+
+.perfil-aulas__informacoes p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-2);
+  margin: var(--espaco-1) 0 0;
+  color: var(--cor-tinta-suave);
+}
+
+.perfil-aulas__vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-6);
+  color: var(--cor-tinta-suave);
+  text-align: center;
+  background-color: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.perfil-aulas__vazio p {
+  margin: 0;
+}
+
+@media (min-width: 600px) {
+  .perfil-aulas__campos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .perfil-aulas__acoes {
+    grid-column: 1 / -1;
+  }
+}

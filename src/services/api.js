@@ -107,3 +107,46 @@ export async function buscarTabelaPrecos() {
   }
   return resposta.json()
 }
+
+// =====================================================
+// MATÉRIAS - HU05
+// =====================================================
+
+// Lista as matérias cadastradas pelo professor logado.
+export function listarMaterias() {
+  return requisicaoAutenticada('/api/materias')
+}
+
+// Cadastra uma nova matéria.
+export function cadastrarMateria(dados) {
+  return requisicaoAutenticada('/api/materias', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dados),
+  })
+}
+
+// Busca uma matéria específica.
+export function buscarMateria(id) {
+  return requisicaoAutenticada(`/api/materias/${id}`)
+}
+
+// Atualiza uma matéria existente.
+export function atualizarMateria(id, dados) {
+  return requisicaoAutenticada(`/api/materias/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dados),
+  })
+}
+
+// Exclui uma matéria.
+export function excluirMateria(id) {
+  return requisicaoAutenticada(`/api/materias/${id}`, {
+    method: 'DELETE',
+  })
+}

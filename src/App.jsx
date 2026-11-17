@@ -1,3 +1,4 @@
+
 import { Navigate, Route, Routes } from 'react-router-dom'
 import CadastroAlunoPage from './features/cadastro/CadastroAlunoPage.jsx'
 import CadastroProfessorPage from './features/cadastro/CadastroProfessorPage.jsx'
@@ -8,17 +9,19 @@ import PerfilAulasPage from './features/perfil/PerfilAulasPage.jsx'
 import PerfilDadosPage from './features/perfil/PerfilDadosPage.jsx'
 import PerfilMateriasPage from './features/perfil/PerfilMateriasPage.jsx'
 import PerfilSegurancaPage from './features/perfil/PerfilSegurancaPage.jsx'
+import PerfilMateriaisPage from './features/perfil/PerfilMateriaisPage.jsx'
+
 import LayoutAutenticacao from './layouts/LayoutAutenticacao.jsx'
 import LayoutPerfil from './layouts/LayoutPerfil.jsx'
-import RotaProtegida from './routes/RotaProtegida.jsx'
 import LayoutPerfilAluno from './layouts/LayoutPerfilAluno.jsx'
+
+import RotaProtegida from './routes/RotaProtegida.jsx'
 import PerfilAlunoDadosPage from './features/perfil/PerfilAlunoDadosPage.jsx'
 
 export default function App() {
   return (
     <Routes>
-      
-      {/* Tela inicial: redireciona para o login */}
+      {/* Tela inicial */}
       <Route path="/" element={<Navigate to="/login" replace />} />
 
       {/* Rotas públicas */}
@@ -29,18 +32,19 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
       </Route>
 
-      {/* Rotas privadas: exigem login */}
+      {/* Rotas privadas */}
       <Route element={<RotaProtegida />}>
         <Route path="/inicio" element={<InicioPage />} />
       </Route>
 
-      {/* Perfil do professor (o do aluno virá depois) */}
+      {/* Perfil do professor */}
       <Route element={<RotaProtegida tipo="PROFESSOR" />}>
         <Route path="/perfil" element={<LayoutPerfil />}>
           <Route index element={<Navigate to="dados" replace />} />
           <Route path="dados" element={<PerfilDadosPage />} />
           <Route path="materias" element={<PerfilMateriasPage />} />
           <Route path="aulas" element={<PerfilAulasPage />} />
+          <Route path="materiais" element={<PerfilMateriaisPage />} />
           <Route path="seguranca" element={<PerfilSegurancaPage />} />
         </Route>
       </Route>
@@ -56,6 +60,7 @@ export default function App() {
         </Route>
       </Route>
 
+      {/* Rota não encontrada */}
       <Route path="*" element={<Navigate to="/cadastro" replace />} />
     </Routes>
   )

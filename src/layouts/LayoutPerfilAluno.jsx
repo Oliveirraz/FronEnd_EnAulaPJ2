@@ -10,7 +10,7 @@ import useAluno from '../hooks/useAluno.js'
 
 const ABAS = [
   { para: 'dados', texto: 'Dados' },
-  { para: '/aluno/buscar-aulas', texto: 'Buscar aulas' },
+  { para: 'buscar-aulas', texto: 'Buscar aulas' },
   { para: 'aulas', texto: 'Aulas' },
   { para: 'materiais', texto: 'Materiais' },
   { para: 'seguranca', texto: 'Segurança' },

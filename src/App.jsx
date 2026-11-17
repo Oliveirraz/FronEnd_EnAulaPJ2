@@ -53,20 +53,24 @@ export default function App() {
 
       {/* Rotas do aluno */}
       <Route element={<RotaProtegida tipo="ALUNO" />}>
-        {/* HU05 - Busca de aulas */}
-        <Route
-          path="/aluno/buscar-aulas"
-          element={<BuscaAulasPage />}
-        />
-
-        {/* Perfil do aluno */}
         <Route path="/aluno/perfil" element={<LayoutPerfilAluno />}>
           <Route index element={<Navigate to="dados" replace />} />
+
           <Route path="dados" element={<PerfilAlunoDadosPage />} />
+
+          {/* HU05 - Busca de aulas dentro do layout */}
+          <Route path="buscar-aulas" element={<BuscaAulasPage />} />
+
           <Route path="aulas" element={<div>Aulas do aluno</div>} />
           <Route path="materiais" element={<div>Materiais do aluno</div>} />
           <Route path="seguranca" element={<div>Segurança do aluno</div>} />
         </Route>
+
+        {/* Redireciona o endereço antigo para dentro do perfil */}
+        <Route
+          path="/aluno/buscar-aulas"
+          element={<Navigate to="/aluno/perfil/buscar-aulas" replace />}
+        />
       </Route>
 
       {/* Rota não encontrada */}

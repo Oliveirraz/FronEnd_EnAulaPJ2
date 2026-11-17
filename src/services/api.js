@@ -15,6 +15,8 @@ export class ApiError extends Error {
 // TRATAMENTO DE ERROS
 // =====================================================
 
+// O backend pode devolver texto puro em alguns erros.
+// Exemplo: "Email já cadastrado".
 async function lerMensagemDoServidor(resposta) {
   const texto = await resposta.text().catch(() => '')
 
@@ -22,10 +24,10 @@ async function lerMensagemDoServidor(resposta) {
 }
 
 // =====================================================
-// CADASTRO
+// CADASTRO DE ALUNO E PROFESSOR
 // =====================================================
 
-// Cadastro multipart/form-data.
+// As rotas de cadastro recebem multipart/form-data.
 // O navegador define automaticamente o Content-Type e o boundary.
 async function enviarCadastro(rota, nomeDaParte, dados, foto) {
   const formData = new FormData()
@@ -68,6 +70,7 @@ export function cadastrarProfessor(dados, foto) {
 // AUTENTICAÇÃO
 // =====================================================
 
+// Login: o backend espera email, senha e tipo.
 export async function entrar({ email, senha, tipo }) {
   const resposta = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
@@ -95,6 +98,7 @@ export async function entrar({ email, senha, tipo }) {
 // REQUISIÇÕES AUTENTICADAS
 // =====================================================
 
+// Envia o token JWT nas requisições privadas.
 async function requisicaoAutenticada(caminho, opcoes = {}) {
   const token = lerSessao()?.token
 
@@ -102,7 +106,7 @@ async function requisicaoAutenticada(caminho, opcoes = {}) {
     ...opcoes,
     headers: {
       ...opcoes.headers,
-      Authorization: token ? `Bearer ${token}` : '',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
   })
 
@@ -173,16 +177,6 @@ export async function buscarTabelaPrecos() {
 }
 
 // =====================================================
-// AULAS
-// =====================================================
-
-// HU10 - Lista as aulas para selecionar onde o material será anexado.
-// ATENÇÃO: confirmar no backend se a rota é /api/aulas.
-export function listarAulas() {
-  return requisicaoAutenticada('/api/aulas')
-}
-
-// =====================================================
 // MATÉRIAS - HU05
 // =====================================================
 
@@ -222,6 +216,26 @@ export function atualizarMateria(id, dados) {
 export function excluirMateria(id) {
   return requisicaoAutenticada(`/api/materias/${id}`, {
     method: 'DELETE',
+  })
+}
+
+// =====================================================
+// AULAS - CRIAÇÃO E LISTAGEM
+// =====================================================
+
+// Lista as aulas cadastradas.
+export function listarAulas() {
+  return requisicaoAutenticada('/api/aulas')
+}
+
+// Cadastra uma nova aula.
+export function cadastrarAula(dados) {
+  return requisicaoAutenticada('/api/aulas', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dados),
   })
 }
 

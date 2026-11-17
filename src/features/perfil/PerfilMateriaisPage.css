@@ -1,0 +1,131 @@
+
+.perfil-materiais {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-5);
+}
+
+.perfil-materiais__descricao {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.perfil-materiais__selecao {
+  max-width: 100%;
+}
+
+.perfil-materiais__envio {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.perfil-materiais__arquivo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  width: 100%;
+}
+
+.perfil-materiais__arquivo label {
+  font-weight: 700;
+}
+
+.perfil-materiais__arquivo input {
+  width: 100%;
+  max-width: 100%;
+}
+
+.perfil-materiais__arquivo small,
+.perfil-materiais__detalhes span {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+  overflow-wrap: anywhere;
+}
+
+.perfil-materiais__arquivo-selecionado {
+  font-weight: 700;
+}
+
+.perfil-materiais__listagem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+
+.perfil-materiais__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+}
+
+.perfil-materiais__cabecalho h3 {
+  margin: 0;
+  font-size: var(--texto-base);
+}
+
+.perfil-materiais__cabecalho span {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.perfil-materiais__lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.perfil-materiais__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.perfil-materiais__detalhes {
+  display: flex;
+  flex: 1 1 12rem;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--espaco-1);
+}
+
+.perfil-materiais__detalhes strong {
+  overflow-wrap: anywhere;
+}
+
+.perfil-materiais__remover {
+  width: auto;
+  min-width: 0;
+}
+
+.perfil-materiais__vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-6);
+  color: var(--cor-tinta-suave);
+  text-align: center;
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.perfil-materiais__vazio p {
+  margin: 0;
+}

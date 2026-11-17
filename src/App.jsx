@@ -53,7 +53,7 @@ export default function App() {
 
       {/* Rotas do aluno */}
       <Route element={<RotaProtegida tipo="ALUNO" />}>
-        {/* HU05 - Tela de busca de aulas */}
+        {/* HU05 - Busca de aulas */}
         <Route
           path="/aluno/buscar-aulas"
           element={<BuscaAulasPage />}

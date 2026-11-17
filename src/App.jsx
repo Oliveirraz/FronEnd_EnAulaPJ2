@@ -1,5 +1,7 @@
 
 import { Navigate, Route, Routes } from 'react-router-dom'
+
+import BuscaAulasPage from './features/busca/BuscaAulasPage.jsx'
 import CadastroAlunoPage from './features/cadastro/CadastroAlunoPage.jsx'
 import CadastroProfessorPage from './features/cadastro/CadastroProfessorPage.jsx'
 import EscolhaPerfilPage from './features/cadastro/EscolhaPerfilPage.jsx'
@@ -10,13 +12,13 @@ import PerfilDadosPage from './features/perfil/PerfilDadosPage.jsx'
 import PerfilMateriasPage from './features/perfil/PerfilMateriasPage.jsx'
 import PerfilSegurancaPage from './features/perfil/PerfilSegurancaPage.jsx'
 import PerfilMateriaisPage from './features/perfil/PerfilMateriaisPage.jsx'
+import PerfilAlunoDadosPage from './features/perfil/PerfilAlunoDadosPage.jsx'
 
 import LayoutAutenticacao from './layouts/LayoutAutenticacao.jsx'
 import LayoutPerfil from './layouts/LayoutPerfil.jsx'
 import LayoutPerfilAluno from './layouts/LayoutPerfilAluno.jsx'
 
 import RotaProtegida from './routes/RotaProtegida.jsx'
-import PerfilAlunoDadosPage from './features/perfil/PerfilAlunoDadosPage.jsx'
 
 export default function App() {
   return (
@@ -32,7 +34,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
       </Route>
 
-      {/* Rotas privadas */}
+      {/* Rotas privadas gerais */}
       <Route element={<RotaProtegida />}>
         <Route path="/inicio" element={<InicioPage />} />
       </Route>
@@ -49,8 +51,15 @@ export default function App() {
         </Route>
       </Route>
 
-      {/* Perfil do aluno */}
+      {/* Rotas do aluno */}
       <Route element={<RotaProtegida tipo="ALUNO" />}>
+        {/* HU05 - Busca de aulas */}
+        <Route
+          path="/aluno/buscar-aulas"
+          element={<BuscaAulasPage />}
+        />
+
+        {/* Perfil do aluno */}
         <Route path="/aluno/perfil" element={<LayoutPerfilAluno />}>
           <Route index element={<Navigate to="dados" replace />} />
           <Route path="dados" element={<PerfilAlunoDadosPage />} />

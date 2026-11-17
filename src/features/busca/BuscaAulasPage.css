@@ -1,0 +1,136 @@
+
+.busca-aulas {
+  width: 100%;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.busca-aulas__conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-5);
+}
+
+.busca-aulas__descricao {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.busca-aulas__filtros {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espaco-4);
+  padding: var(--espaco-4);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.busca-aulas__raio {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.busca-aulas__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.busca-aulas__resultados {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+
+.busca-aulas__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+}
+
+.busca-aulas__cabecalho h2 {
+  margin: 0;
+  font-size: var(--texto-base);
+}
+
+.busca-aulas__cabecalho span {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.busca-aulas__lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espaco-3);
+}
+
+.busca-aulas__card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.busca-aulas__card-topo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+}
+
+.busca-aulas__card h3 {
+  margin: 0;
+  font-size: var(--texto-base);
+}
+
+.busca-aulas__professor {
+  margin: var(--espaco-1) 0 0;
+  color: var(--cor-tinta-suave);
+}
+
+.busca-aulas__preco {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  white-space: nowrap;
+}
+
+.busca-aulas__preco small {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+  font-weight: 400;
+}
+
+.busca-aulas__dados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2) var(--espaco-4);
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+@media (min-width: 650px) {
+  .busca-aulas__filtros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .busca-aulas__raio,
+  .busca-aulas__acoes {
+    grid-column: 1 / -1;
+  }
+
+  .busca-aulas__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -292,3 +292,43 @@ export function excluirMaterialApoio(materialId) {
     }
   )
 }
+
+// =====================================================
+// BUSCA DE AULAS - HU05
+// =====================================================
+
+// O backend obtém latitude e longitude do aluno autenticado.
+// O raio padrão é 5 km para presencial e 100 km para online.
+export function buscarAulas(filtros = {}) {
+  const parametros = new URLSearchParams()
+
+  if (filtros.materiaId) {
+    parametros.set('materiaId', filtros.materiaId)
+  }
+
+  if (filtros.professorId) {
+    parametros.set('professorId', filtros.professorId)
+  }
+
+  if (filtros.valorMinimo !== '') {
+    parametros.set('valorMinimo', filtros.valorMinimo)
+  }
+
+  if (filtros.valorMaximo !== '') {
+    parametros.set('valorMaximo', filtros.valorMaximo)
+  }
+
+  if (filtros.modalidade) {
+    parametros.set('modalidade', filtros.modalidade)
+
+    parametros.set(
+      'raioKm',
+      filtros.modalidade === 'PRESENCIAL' ? '5' : '100'
+    )
+  }
+
+  const query = parametros.toString()
+  const caminho = `/api/aulas/buscar${query ? `?${query}` : ''}`
+
+  return requisicaoAutenticada(caminho)
+}

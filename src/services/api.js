@@ -428,3 +428,20 @@ export function recusarMatricula(matriculaId, motivo) {
     }
   )
 }
+// =====================================================
+// HU012 - HISTÓRICO COMPLETO DE MATRÍCULAS
+// =====================================================
+
+// Professor consulta todas as matrículas da aula,
+// incluindo pendentes, aceitas, recusadas e canceladas.
+export function listarMatriculasAula(aulaId) {
+  if (!aulaId) {
+    return Promise.reject(
+      new Error('Selecione uma aula para consultar as matrículas.')
+    )
+  }
+
+  return requisicaoAutenticada(
+    `/api/aulas/${encodeURIComponent(aulaId)}/matriculas`
+  )
+}

@@ -15,7 +15,7 @@ import CartaoSecao from '../../components/ui/CartaoSecao.jsx'
 
 import {
   listarAulas,
-  listarMatriculasPendentes,
+  listarMatriculasAula,
   aceitarMatricula,
   recusarMatricula,
 } from '../../services/api.js'
@@ -110,7 +110,7 @@ export default function PerfilMatriculasPage() {
     setSucesso('')
 
     try {
-      const resultado = await listarMatriculasPendentes(aulaId)
+      const resultado = await listarMatriculasAula(aulaId)
 
       setMatriculas(normalizarLista(resultado))
     } catch (error) {

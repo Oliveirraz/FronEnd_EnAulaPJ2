@@ -2,12 +2,18 @@
 .perfil-aulas {
   display: flex;
   flex-direction: column;
-  gap: var(--espaco-5);
+  gap: var(--espaco-5, 1.5rem);
 }
 
-.perfil-aulas__descricao {
+.perfil-aulas__descricao,
+.perfil-aulas__texto-apoio {
   margin: 0;
   color: var(--cor-tinta-suave);
+}
+
+.perfil-aulas__texto-apoio {
+  margin-top: var(--espaco-1);
+  font-size: var(--texto-pequeno);
 }
 
 .perfil-aulas__formulario,
@@ -48,6 +54,162 @@
   font-size: var(--texto-pequeno);
 }
 
+.perfil-aulas__resumo {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--espaco-3);
+}
+
+.perfil-aulas__indicador {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  padding: var(--espaco-3);
+  background: var(--cor-papel);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.perfil-aulas__indicador-valor {
+  color: var(--cor-quadro);
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.perfil-aulas__indicador-label {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.perfil-aulas__abas {
+  display: flex;
+  gap: var(--espaco-2);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.perfil-aulas__abas button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-2);
+  min-height: 44px;
+  padding: var(--espaco-2) var(--espaco-3);
+  color: var(--cor-tinta-suave);
+  background: transparent;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.perfil-aulas__abas button:hover {
+  color: var(--cor-quadro);
+}
+
+.perfil-aulas__abas button.ativo {
+  color: var(--cor-quadro);
+  border-bottom-color: var(--cor-quadro);
+}
+
+.perfil-aulas__abas button span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 23px;
+  height: 23px;
+  padding: 0 6px;
+  color: var(--cor-quadro);
+  background: var(--cor-giz);
+  border-radius: 20px;
+  font-size: 0.75rem;
+}
+
+.perfil-aulas__filtros {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espaco-3);
+  align-items: end;
+}
+
+.perfil-aulas__pesquisa {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  min-height: 44px;
+  padding: 0 var(--espaco-3);
+  color: var(--cor-tinta-suave);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.perfil-aulas__pesquisa:focus-within {
+  outline: 2px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+.perfil-aulas__pesquisa input {
+  width: 100%;
+  min-width: 0;
+  height: 42px;
+  color: var(--cor-tinta);
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font: inherit;
+}
+
+.perfil-aulas__pesquisa input::placeholder {
+  color: var(--cor-tinta-suave);
+}
+
+.perfil-aulas__filtro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.perfil-aulas__filtro select {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 var(--espaco-3);
+  color: var(--cor-tinta);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+  font: inherit;
+}
+
+.perfil-aulas__limpar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-1);
+  min-height: 40px;
+  padding: var(--espaco-2) var(--espaco-3);
+  color: var(--cor-quadro);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.perfil-aulas__limpar:hover {
+  text-decoration: underline;
+}
+
+.perfil-aulas__resultado {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
 .perfil-aulas__lista {
   display: flex;
   flex-direction: column;
@@ -58,23 +220,71 @@
 }
 
 .perfil-aulas__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
   padding: var(--espaco-4);
   background-color: var(--cor-superficie);
   border: var(--borda);
   border-radius: var(--raio);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.perfil-aulas__item:hover {
+  border-color: var(--cor-quadro);
+  box-shadow: 0 2px 8px rgb(27 22 48 / 8%);
+}
+
+.perfil-aulas__item-cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-2);
 }
 
 .perfil-aulas__informacoes h4 {
-  margin: 0 0 var(--espaco-2);
+  margin: 0;
+  color: var(--cor-tinta);
 }
 
-.perfil-aulas__informacoes p {
+.perfil-aulas__status {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.perfil-aulas__status--futura {
+  color: #245b48;
+  background: #e1f5ec;
+}
+
+.perfil-aulas__status--anterior {
+  color: #5a5272;
+  background: #eeebfa;
+}
+
+.perfil-aulas__detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2) var(--espaco-4);
+}
+
+.perfil-aulas__detalhes p,
+.perfil-aulas__modalidade {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--espaco-2);
-  margin: var(--espaco-1) 0 0;
+  margin: 0;
   color: var(--cor-tinta-suave);
+}
+
+.perfil-aulas__modalidade {
+  font-size: var(--texto-pequeno);
 }
 
 .perfil-aulas__vazio {
@@ -94,6 +304,41 @@
   margin: 0;
 }
 
+.perfil-aulas__paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--espaco-4);
+  padding-top: var(--espaco-2);
+}
+
+.perfil-aulas__paginacao button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  color: var(--cor-quadro);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+  cursor: pointer;
+}
+
+.perfil-aulas__paginacao button:hover:not(:disabled) {
+  background: var(--cor-giz);
+}
+
+.perfil-aulas__paginacao button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.perfil-aulas__paginacao span {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
 @media (min-width: 600px) {
   .perfil-aulas__campos {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -101,5 +346,27 @@
 
   .perfil-aulas__acoes {
     grid-column: 1 / -1;
+  }
+
+  .perfil-aulas__filtros {
+    grid-template-columns: minmax(0, 2fr) repeat(2, minmax(130px, 1fr)) auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .perfil-aulas__resumo {
+    gap: var(--espaco-2);
+  }
+
+  .perfil-aulas__indicador {
+    padding: var(--espaco-2);
+  }
+
+  .perfil-aulas__indicador-valor {
+    font-size: 1.25rem;
+  }
+
+  .perfil-aulas__detalhes {
+    flex-direction: column;
   }
 }

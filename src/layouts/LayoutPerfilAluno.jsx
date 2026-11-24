@@ -8,13 +8,16 @@ import { lerSessao, limparSessao } from '../services/sessao.js'
 import './LayoutPerfil.css'
 import useAluno from '../hooks/useAluno.js'
 
+
 const ABAS = [
   { para: 'dados', texto: 'Dados' },
   { para: 'buscar-aulas', texto: 'Buscar aulas' },
+  { para: 'selecionar-aulas', texto: 'Selecionar aulas' },
   { para: 'aulas', texto: 'Aulas' },
   { para: 'materiais', texto: 'Materiais' },
   { para: 'seguranca', texto: 'Segurança' },
 ]
+
 
 export default function LayoutPerfilAluno() {
   const navigate = useNavigate()

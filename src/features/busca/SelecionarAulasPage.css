@@ -1,0 +1,241 @@
+
+.selecionar-aulas {
+  width: 100%;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.selecionar-aulas__conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4);
+}
+
+.selecionar-aulas__apresentacao {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+}
+
+.selecionar-aulas__icone {
+  display: grid;
+  flex: 0 0 3.5rem;
+  width: 3.5rem;
+  height: 3.5rem;
+  place-items: center;
+  color: var(--cor-destaque);
+  background: var(--cor-superficie);
+  border-radius: var(--raio);
+}
+
+.selecionar-aulas__apresentacao h2 {
+  margin: 0 0 var(--espaco-1);
+  font-size: var(--texto-medio);
+}
+
+.selecionar-aulas__apresentacao p,
+.selecionar-aulas__informacao p {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.selecionar-aulas__informacao {
+  padding: var(--espaco-3);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+}
+
+.selecionar-aulas__informacao > strong {
+  display: block;
+  margin-bottom: var(--espaco-1);
+}
+
+.selecionar-aulas__cabecalho-lista {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.selecionar-aulas__cabecalho-lista h3 {
+  margin: 0;
+  font-size: var(--texto-base);
+}
+
+.selecionar-aulas__cabecalho-lista p {
+  margin: var(--espaco-1) 0 0;
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.selecionar-aulas__contador {
+  padding: var(--espaco-2) var(--espaco-3);
+  color: var(--cor-destaque);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: 999px;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+}
+
+.selecionar-aulas__lista {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--espaco-3);
+}
+
+.selecionar-aulas__card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  background: var(--cor-superficie);
+  border: var(--borda);
+  border-radius: var(--raio);
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.selecionar-aulas__card:hover {
+  border-color: var(--cor-destaque);
+}
+
+.selecionar-aulas__card--selecionada {
+  border: 2px solid var(--cor-destaque);
+  background: var(--cor-quadro);
+}
+
+.selecionar-aulas__card input {
+  flex: 0 0 auto;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: 0.25rem;
+  accent-color: var(--cor-destaque);
+  cursor: pointer;
+}
+
+.selecionar-aulas__card-conteudo {
+  flex: 1;
+  min-width: 0;
+}
+
+.selecionar-aulas__card-topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+}
+
+.selecionar-aulas__materia {
+  font-size: var(--texto-base);
+  font-weight: 700;
+}
+
+.selecionar-aulas__professor {
+  margin: var(--espaco-1) 0 0;
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.selecionar-aulas__preco {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  white-space: nowrap;
+}
+
+.selecionar-aulas__preco small {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+  font-weight: 400;
+}
+
+.selecionar-aulas__detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2) var(--espaco-4);
+  margin-top: var(--espaco-3);
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.selecionar-aulas__detalhes span {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-1);
+}
+
+.selecionar-aulas__check {
+  flex: 0 0 auto;
+  color: var(--cor-destaque);
+}
+
+.selecionar-aulas__rodape {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espaco-3);
+  padding-top: var(--espaco-3);
+  border-top: var(--borda);
+}
+
+.selecionar-aulas__rodape > span {
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.selecionar-aulas__atualizar {
+  align-self: flex-start;
+  padding: var(--espaco-2) 0;
+  color: var(--cor-destaque);
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.selecionar-aulas__atualizar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.selecionar-aulas__link-localizacao {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  align-self: flex-start;
+  color: var(--cor-destaque);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.selecionar-aulas__link-localizacao:hover {
+  text-decoration: underline;
+}
+
+.selecionar-aulas__estado {
+  color: var(--cor-tinta-suave);
+}
+
+@media (min-width: 700px) {
+  .selecionar-aulas__lista {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .selecionar-aulas__rodape {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .selecionar-aulas__rodape .botao {
+    width: 100%;
+  }
+}

@@ -2,6 +2,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import BuscaAulasPage from './features/busca/BuscaAulasPage.jsx'
+import SelecionarAulasPage from './features/busca/SelecionarAulasPage.jsx'
 import CadastroAlunoPage from './features/cadastro/CadastroAlunoPage.jsx'
 import CadastroProfessorPage from './features/cadastro/CadastroProfessorPage.jsx'
 import EscolhaPerfilPage from './features/cadastro/EscolhaPerfilPage.jsx'
@@ -23,7 +24,6 @@ import RotaProtegida from './routes/RotaProtegida.jsx'
 export default function App() {
   return (
     <Routes>
-      {/* Tela inicial */}
       <Route path="/" element={<Navigate to="/login" replace />} />
 
       {/* Rotas públicas */}
@@ -58,15 +58,20 @@ export default function App() {
 
           <Route path="dados" element={<PerfilAlunoDadosPage />} />
 
-          {/* HU05 - Busca de aulas dentro do layout */}
+          {/* HU05 - Busca de aulas */}
           <Route path="buscar-aulas" element={<BuscaAulasPage />} />
+
+          {/* HU06 - Seleção de aulas */}
+          <Route
+            path="selecionar-aulas"
+            element={<SelecionarAulasPage />}
+          />
 
           <Route path="aulas" element={<div>Aulas do aluno</div>} />
           <Route path="materiais" element={<div>Materiais do aluno</div>} />
           <Route path="seguranca" element={<div>Segurança do aluno</div>} />
         </Route>
 
-        {/* Redireciona o endereço antigo para dentro do perfil */}
         <Route
           path="/aluno/buscar-aulas"
           element={<Navigate to="/aluno/perfil/buscar-aulas" replace />}

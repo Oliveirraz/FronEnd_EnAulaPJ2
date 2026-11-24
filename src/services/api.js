@@ -361,3 +361,70 @@ export function solicitarMatricula(aulaId) {
     }
   )
 }
+
+// =====================================================
+// GERENCIAMENTO DE MATRÍCULAS - HU11
+// =====================================================
+
+// Professor consulta as solicitações pendentes de uma aula.
+export function listarMatriculasPendentes(aulaId) {
+  if (!aulaId) {
+    return Promise.reject(
+      new Error('Selecione uma aula para consultar as matrículas.')
+    )
+  }
+
+  return requisicaoAutenticada(
+    `/api/aulas/${encodeURIComponent(aulaId)}/matriculas/pendentes`
+  )
+}
+
+// Professor aceita uma solicitação de matrícula.
+export function aceitarMatricula(matriculaId) {
+  if (!matriculaId) {
+    return Promise.reject(
+      new Error('Informe a matrícula que deseja aceitar.')
+    )
+  }
+
+  return requisicaoAutenticada(
+    `/api/matriculas/${encodeURIComponent(matriculaId)}/aceitar`,
+    {
+      method: 'PATCH',
+    }
+  )
+}
+
+// Professor recusa uma solicitação de matrícula.
+export function recusarMatricula(matriculaId, motivo) {
+  if (!matriculaId) {
+    return Promise.reject(
+      new Error('Informe a matrícula que deseja recusar.')
+    )
+  }
+
+  if (!motivo || !motivo.trim()) {
+    return Promise.reject(
+      new Error('É obrigatório informar o motivo da recusa.')
+    )
+  }
+
+  if (motivo.trim().length > 500) {
+    return Promise.reject(
+      new Error('O motivo deve ter no máximo 500 caracteres.')
+    )
+  }
+
+  return requisicaoAutenticada(
+    `/api/matriculas/${encodeURIComponent(matriculaId)}/recusar`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        motivo: motivo.trim(),
+      }),
+    }
+  )
+}

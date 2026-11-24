@@ -16,6 +16,7 @@ const ABAS = [
   { para: 'materias', texto: 'Matérias' },
   { para: 'aulas', texto: 'Aulas' },
   { para: 'materiais', texto: 'Materiais' },
+  { para: 'matriculas', texto: 'Matrículas' },
   { para: 'seguranca', texto: 'Segurança' },
 ]
 

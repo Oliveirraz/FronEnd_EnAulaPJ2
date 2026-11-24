@@ -1,5 +1,5 @@
-
 import { useState } from 'react'
+
 import {
   IconMapPin,
   IconCurrentLocation,
@@ -7,6 +7,8 @@ import {
 } from '@tabler/icons-react'
 
 import Aviso from '../../components/ui/Aviso.jsx'
+import LocalizadorEndereco from '../../components/ui/LocalizadorEndereco.jsx'
+
 import {
   atualizarMinhaLocalizacaoProfessor,
 } from '../../services/api.js'
@@ -14,17 +16,29 @@ import {
 export default function LocalizacaoProfessor() {
   const [latitude, setLatitude] = useState('')
   const [longitude, setLongitude] = useState('')
+
   const [carregando, setCarregando] = useState(false)
   const [localizando, setLocalizando] = useState(false)
+
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
+
+  function atualizarCoordenadas(coordenadas) {
+    setLatitude(coordenadas.latitude)
+    setLongitude(coordenadas.longitude)
+
+    setErro('')
+    setSucesso('')
+  }
 
   function usarLocalizacaoAtual() {
     setErro('')
     setSucesso('')
 
     if (!navigator.geolocation) {
-      setErro('Seu navegador não oferece suporte à localização.')
+      setErro(
+        'Seu navegador não oferece suporte à localização.'
+      )
       return
     }
 
@@ -32,16 +46,22 @@ export default function LocalizacaoProfessor() {
 
     navigator.geolocation.getCurrentPosition(
       (posicao) => {
-        setLatitude(posicao.coords.latitude.toFixed(7))
-        setLongitude(posicao.coords.longitude.toFixed(7))
+        atualizarCoordenadas({
+          latitude: posicao.coords.latitude.toFixed(7),
+          longitude: posicao.coords.longitude.toFixed(7),
+        })
+
         setLocalizando(false)
       },
+
       () => {
         setErro(
           'Não foi possível obter sua localização. Verifique a permissão do navegador.'
         )
+
         setLocalizando(false)
       },
+
       {
         enableHighAccuracy: true,
         timeout: 15000,
@@ -52,6 +72,7 @@ export default function LocalizacaoProfessor() {
 
   async function salvarLocalizacao(evento) {
     evento.preventDefault()
+
     setErro('')
     setSucesso('')
 
@@ -68,7 +89,9 @@ export default function LocalizacaoProfessor() {
       lon < -180 ||
       lon > 180
     ) {
-      setErro('Informe uma latitude e longitude válidas.')
+      setErro(
+        'Pesquise seu endereço ou informe uma latitude e longitude válidas.'
+      )
       return
     }
 
@@ -80,27 +103,17 @@ export default function LocalizacaoProfessor() {
         longitude: lon,
       })
 
-      setSucesso('Sua localização foi salva com sucesso.')
+      setSucesso(
+        'Sua localização foi salva com sucesso.'
+      )
     } catch (error) {
-      setErro(error.message || 'Não foi possível salvar sua localização.')
+      setErro(
+        error.message || 'Não foi possível salvar sua localização.'
+      )
     } finally {
       setCarregando(false)
     }
   }
-
-  const coordenadasValidas =
-    latitude.trim() !== '' &&
-    longitude.trim() !== '' &&
-    Number.isFinite(Number(latitude)) &&
-    Number.isFinite(Number(longitude)) &&
-    Number(latitude) >= -90 &&
-    Number(latitude) <= 90 &&
-    Number(longitude) >= -180 &&
-    Number(longitude) <= 180
-
-  const mapaUrl = coordenadasValidas
-    ? `https://www.openstreetmap.org/export/embed.html?bbox=${Number(longitude) - 0.005}%2C${Number(latitude) - 0.005}%2C${Number(longitude) + 0.005}%2C${Number(latitude) + 0.005}&layer=mapnik&marker=${latitude}%2C${longitude}`
-    : ''
 
   return (
     <section className="localizacao-professor">
@@ -109,25 +122,46 @@ export default function LocalizacaoProfessor() {
 
         <div>
           <h3>Minha localização</h3>
+
           <p>
-            Cadastre sua localização para que os alunos encontrem suas aulas
-            presenciais.
+            Pesquise seu endereço no mapa para que os alunos
+            encontrem suas aulas presenciais.
           </p>
         </div>
       </div>
 
-      {erro && <Aviso tipo="erro">{erro}</Aviso>}
-      {sucesso && <Aviso tipo="sucesso">{sucesso}</Aviso>}
+      {erro && (
+        <Aviso tipo="erro">
+          {erro}
+        </Aviso>
+      )}
+
+      {sucesso && (
+        <Aviso tipo="sucesso">
+          {sucesso}
+        </Aviso>
+      )}
 
       <form onSubmit={salvarLocalizacao}>
+        <LocalizadorEndereco
+          latitude={latitude}
+          longitude={longitude}
+          onCoordinatesChange={atualizarCoordenadas}
+        />
+
         <div className="localizacao-professor__campos">
           <label>
             <span>Latitude</span>
+
             <input
               type="number"
               step="any"
+              min="-90"
+              max="90"
               value={latitude}
-              onChange={(evento) => setLatitude(evento.target.value)}
+              onChange={(evento) =>
+                setLatitude(evento.target.value)
+              }
               placeholder="-7.2307000"
               required
             />
@@ -135,11 +169,16 @@ export default function LocalizacaoProfessor() {
 
           <label>
             <span>Longitude</span>
+
             <input
               type="number"
               step="any"
+              min="-180"
+              max="180"
               value={longitude}
-              onChange={(evento) => setLongitude(evento.target.value)}
+              onChange={(evento) =>
+                setLongitude(evento.target.value)
+              }
               placeholder="-35.8811000"
               required
             />
@@ -153,7 +192,10 @@ export default function LocalizacaoProfessor() {
             disabled={localizando || carregando}
           >
             <IconCurrentLocation size="1.1rem" />
-            {localizando ? 'Localizando...' : 'Usar minha localização'}
+
+            {localizando
+              ? 'Localizando...'
+              : 'Usar minha localização'}
           </button>
 
           <button
@@ -161,29 +203,13 @@ export default function LocalizacaoProfessor() {
             disabled={localizando || carregando}
           >
             <IconDeviceFloppy size="1.1rem" />
-            {carregando ? 'Salvando...' : 'Salvar localização'}
+
+            {carregando
+              ? 'Salvando...'
+              : 'Salvar localização'}
           </button>
         </div>
       </form>
-
-      {coordenadasValidas && (
-        <div className="localizacao-professor__mapa">
-          <iframe
-            title="Mapa da localização do professor"
-            src={mapaUrl}
-            loading="lazy"
-            referrerPolicy="no-referrer"
-          />
-
-          <a
-            href={`https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Abrir mapa completo
-          </a>
-        </div>
-      )}
     </section>
   )
 }

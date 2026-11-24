@@ -20,6 +20,7 @@ import LayoutPerfil from './layouts/LayoutPerfil.jsx'
 import LayoutPerfilAluno from './layouts/LayoutPerfilAluno.jsx'
 
 import RotaProtegida from './routes/RotaProtegida.jsx'
+import PerfilMatriculasPage from './features/perfil/PerfilMatriculasPage.jsx'
 
 export default function App() {
   return (
@@ -47,6 +48,7 @@ export default function App() {
           <Route path="materias" element={<PerfilMateriasPage />} />
           <Route path="aulas" element={<PerfilAulasPage />} />
           <Route path="materiais" element={<PerfilMateriaisPage />} />
+          <Route path="matriculas" element={<PerfilMatriculasPage />} />
           <Route path="seguranca" element={<PerfilSegurancaPage />} />
         </Route>
       </Route>

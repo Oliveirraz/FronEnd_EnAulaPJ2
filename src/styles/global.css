@@ -66,3 +66,146 @@ img {
     animation: none !important;
   }
 }
+.localizador-endereco {
+  display: grid;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.localizador-endereco__pesquisa {
+  display: flex;
+  align-items: end;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+.localizador-endereco__pesquisa label {
+  display: grid;
+  gap: 0.35rem;
+  flex: 1 1 280px;
+  min-width: 0;
+}
+
+.localizador-endereco__pesquisa label span {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.localizador-endereco__pesquisa input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.7rem 0.8rem;
+  border: 1px solid var(--cor-borda, #cbd5e1);
+  border-radius: 8px;
+  font: inherit;
+}
+
+.localizador-endereco__pesquisa > button {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.65rem 1rem;
+  border: 0;
+  border-radius: 8px;
+  background: var(--cor-primaria, #2457a7);
+  color: white;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.localizador-endereco__pesquisa > button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.localizador-endereco__erro {
+  margin: 0;
+  color: #b42318;
+  font-size: 0.9rem;
+}
+
+.localizador-endereco__resultados {
+  display: grid;
+  gap: 0.4rem;
+  padding: 0.75rem;
+  border: 1px solid var(--cor-borda, #cbd5e1);
+  border-radius: 8px;
+}
+
+.localizador-endereco__resultados > button {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.65rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: var(--cor-superficie, #f8fafc);
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.localizador-endereco__resultados > button:hover {
+  border-color: var(--cor-primaria, #2457a7);
+}
+
+.localizador-endereco__resultados > button span {
+  overflow-wrap: anywhere;
+}
+
+.localizador-endereco__selecionado {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--cor-texto-secundario, #475569);
+}
+
+.localizador-endereco__mapa {
+  display: block;
+  width: 100%;
+  min-height: 280px;
+  border: 0;
+  border-radius: 10px;
+}
+
+.localizador-endereco__mapa-vazio {
+  display: grid;
+  place-items: center;
+  min-height: 110px;
+  padding: 1rem;
+  border: 1px dashed var(--cor-borda, #cbd5e1);
+  border-radius: 10px;
+  color: var(--cor-texto-secundario, #64748b);
+  text-align: center;
+}
+
+.localizador-endereco__credito {
+  color: var(--cor-texto-secundario, #64748b);
+  font-size: 0.75rem;
+}
+
+.localizacao-aluno__coordenadas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+@media (max-width: 600px) {
+  .localizador-endereco__pesquisa {
+    align-items: stretch;
+  }
+
+  .localizador-endereco__pesquisa > button {
+    width: 100%;
+  }
+
+  .localizador-endereco__mapa {
+    min-height: 230px;
+  }
+
+  .localizacao-aluno__coordenadas {
+    grid-template-columns: 1fr;
+  }
+}

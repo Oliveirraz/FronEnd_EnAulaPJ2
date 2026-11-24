@@ -9,6 +9,7 @@ import Input from '../../components/ui/Input.jsx'
 import Select from '../../components/ui/Select.jsx'
 import { buscarAulas } from '../../services/api.js'
 import { formatarMoeda } from '../../utils/formatadores.js'
+import LocalizacaoAluno from './LocalizacaoAluno.jsx'
 
 import './BuscaAulasPage.css'
 
@@ -43,6 +44,7 @@ export default function BuscaAulasPage() {
   const [carregando, setCarregando] = useState(true)
   const [erro, setErro] = useState('')
   const [mensagem, setMensagem] = useState('')
+  const [localizacaoPendente, setLocalizacaoPendente] = useState(false)
 
   const carregarAulas = useCallback(
     async (filtrosAplicados = FILTROS_INICIAIS, atualizarCatalogo = false) => {
@@ -58,6 +60,7 @@ export default function BuscaAulasPage() {
           : []
 
         setResultados(lista)
+        setLocalizacaoPendente(false)
 
         if (atualizarCatalogo) {
           setCatalogoInicial(lista)
@@ -71,10 +74,20 @@ export default function BuscaAulasPage() {
         )
       } catch (error) {
         setResultados([])
-        setErro(
+
+        const mensagemErro =
           error.message ||
-            'Não foi possível buscar as aulas. Tente novamente.'
-        )
+          'Não foi possível buscar as aulas. Tente novamente.'
+
+        if (
+          mensagemErro.toLowerCase().includes('cadastre sua localização') ||
+          mensagemErro.toLowerCase().includes('localização do aluno')
+        ) {
+          setLocalizacaoPendente(true)
+          setErro('')
+        } else {
+          setErro(mensagemErro)
+        }
       } finally {
         setCarregando(false)
       }
@@ -82,14 +95,12 @@ export default function BuscaAulasPage() {
     []
   )
 
-  // Ao abrir a tela, carrega as aulas disponíveis para montar os filtros.
   useEffect(() => {
     Promise.resolve().then(() =>
       carregarAulas(FILTROS_INICIAIS, true)
     )
   }, [carregarAulas])
 
-  // Matérias disponíveis nas aulas encontradas na busca inicial.
   const opcoesMaterias = useMemo(() => {
     const materias = new Map()
 
@@ -104,7 +115,6 @@ export default function BuscaAulasPage() {
       .map(([valor, texto]) => ({ valor, texto }))
   }, [catalogoInicial])
 
-  // Professores disponíveis nas aulas encontradas na busca inicial.
   const opcoesProfessores = useMemo(() => {
     const professores = new Map()
 
@@ -146,6 +156,11 @@ export default function BuscaAulasPage() {
     carregarAulas(FILTROS_INICIAIS, true)
   }
 
+  async function aposSalvarLocalizacao() {
+    setLocalizacaoPendente(false)
+    await carregarAulas(FILTROS_INICIAIS, true)
+  }
+
   const raioDescricao =
     filtros.modalidade === 'PRESENCIAL'
       ? 'Raio aplicado: 5 km'
@@ -164,6 +179,16 @@ export default function BuscaAulasPage() {
               Encontre aulas e monitores de acordo com a matéria, o valor e a
               modalidade que você procura.
             </p>
+
+            {localizacaoPendente && (
+              <>
+                <Aviso tipo="erro">
+                  Cadastre sua localização no perfil antes de buscar aulas.
+                </Aviso>
+
+                <LocalizacaoAluno aoSalvar={aposSalvarLocalizacao} />
+              </>
+            )}
 
             {erro && <Aviso tipo="erro">{erro}</Aviso>}
 
@@ -268,12 +293,13 @@ export default function BuscaAulasPage() {
                 <p role="status">Buscando aulas disponíveis...</p>
               )}
 
-              {!carregando && !erro && resultados.length === 0 && (
-                <Aviso tipo="info">
-                  {mensagem ||
-                    'Nenhuma aula encontrada. Experimente alterar os filtros.'}
-                </Aviso>
-              )}
+              {!carregando && !erro && !localizacaoPendente &&
+                resultados.length === 0 && (
+                  <Aviso tipo="info">
+                    {mensagem ||
+                      'Nenhuma aula encontrada. Experimente alterar os filtros.'}
+                  </Aviso>
+                )}
 
               {!carregando && resultados.length > 0 && (
                 <div className="busca-aulas__lista">

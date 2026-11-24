@@ -120,6 +120,75 @@
   font-size: var(--texto-pequeno);
 }
 
+/* Cadastro de localização do aluno */
+
+.localizacao-aluno {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  border: 1px solid var(--cor-borda, #d8d2e8);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.localizacao-aluno__titulo {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  color: var(--cor-destaque, #38296f);
+}
+
+.localizacao-aluno__titulo h2 {
+  margin: 0;
+  font-size: var(--texto-base);
+}
+
+.localizacao-aluno > p {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.localizacao-aluno__formulario {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--espaco-3);
+}
+
+.localizacao-aluno__formulario .campo:first-child {
+  grid-column: 1 / -1;
+}
+
+.localizacao-aluno__acoes {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+
+.localizacao-aluno__mapa {
+  display: block;
+  width: 100%;
+  min-height: 280px;
+  border: 0;
+  border-radius: var(--raio);
+}
+
+.localizacao-aluno__mapa-vazio {
+  display: grid;
+  min-height: 120px;
+  place-items: center;
+  padding: var(--espaco-3);
+  border: 1px dashed var(--cor-borda, #d8d2e8);
+  border-radius: var(--raio);
+  color: var(--cor-tinta-suave);
+  text-align: center;
+}
+
+.localizacao-aluno__observacao {
+  color: var(--cor-tinta-suave);
+}
+
 @media (min-width: 650px) {
   .busca-aulas__filtros {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -132,5 +201,16 @@
 
   .busca-aulas__lista {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .localizacao-aluno__formulario {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .localizacao-aluno__formulario .campo:first-child,
+  .localizacao-aluno__acoes {
+    grid-column: auto;
   }
 }

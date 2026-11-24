@@ -342,3 +342,22 @@ export function buscarAulas(filtros = {}) {
 
   return requisicaoAutenticada(caminho)
 }
+
+/**
+ * HU06 - Solicita matrícula do aluno em uma aula.
+ * O backend registra a solicitação com status PENDENTE.
+ */
+export function solicitarMatricula(aulaId) {
+  if (!aulaId) {
+    return Promise.reject(
+      new Error('Selecione uma aula válida para solicitar matrícula.')
+    )
+  }
+
+  return requisicaoAutenticada(
+    `/api/aulas/${encodeURIComponent(aulaId)}/matriculas`,
+    {
+      method: 'POST',
+    }
+  )
+}

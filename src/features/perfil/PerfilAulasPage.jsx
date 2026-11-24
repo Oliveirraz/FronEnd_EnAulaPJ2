@@ -6,10 +6,11 @@ import {
   IconClock,
   IconSchool,
   IconSearch,
+  IconEdit,
+  IconTrash,
+  IconX,
   IconChevronLeft,
   IconChevronRight,
-  IconFilter,
-  IconX,
 } from '@tabler/icons-react'
 
 import Aviso from '../../components/ui/Aviso.jsx'
@@ -17,8 +18,15 @@ import Button from '../../components/ui/Button.jsx'
 import CartaoSecao from '../../components/ui/CartaoSecao.jsx'
 import Input from '../../components/ui/Input.jsx'
 import Select from '../../components/ui/Select.jsx'
-import { cadastrarAula, listarAulas, listarMaterias } from '../../services/api.js'
+import {
+  cadastrarAula,
+  listarAulas,
+  listarMaterias,
+  atualizarAula,
+  excluirAula,
+} from '../../services/api.js'
 import { formatarMoeda } from '../../utils/formatadores.js'
+import LocalizacaoProfessor from './LocalizacaoProfessor.jsx'
 
 import './PerfilAulasPage.css'
 
@@ -53,22 +61,22 @@ function formatarData(data) {
 }
 
 function formatarHorario(horario) {
-  return horario ? horario.slice(0, 5) : 'Horário não informado'
+  return horario ? String(horario).slice(0, 5) : 'Horário não informado'
 }
 
 function obterDataHoraAula(aula) {
   if (!aula.data) return null
 
   const horario = aula.horario || '00:00:00'
-  return new Date(`${aula.data}T${horario}`)
+  const dataHora = new Date(`${aula.data}T${horario}`)
+
+  return Number.isNaN(dataHora.getTime()) ? null : dataHora
 }
 
 function aulaAindaVaiAcontecer(aula) {
   const dataHora = obterDataHoraAula(aula)
 
-  if (!dataHora || Number.isNaN(dataHora.getTime())) {
-    return false
-  }
+  if (!dataHora) return false
 
   const fimAula = new Date(
     dataHora.getTime() + (Number(aula.duracao) || 0) * 60 * 60 * 1000
@@ -77,16 +85,14 @@ function aulaAindaVaiAcontecer(aula) {
   return fimAula >= new Date()
 }
 
-function formatarQuantidade(quantidade, singular, plural) {
-  return `${quantidade} ${quantidade === 1 ? singular : plural}`
-}
-
 export default function PerfilAulasPage() {
   const [materias, setMaterias] = useState([])
   const [aulas, setAulas] = useState([])
   const [carregandoDados, setCarregandoDados] = useState(true)
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
+  const [aulaEmEdicao, setAulaEmEdicao] = useState(null)
+  const [excluindoId, setExcluindoId] = useState(null)
 
   const [abaSelecionada, setAbaSelecionada] = useState('PROXIMAS')
   const [pesquisa, setPesquisa] = useState('')
@@ -144,6 +150,37 @@ export default function PerfilAulasPage() {
     })
   }
 
+  function cancelarEdicao() {
+    setAulaEmEdicao(null)
+    reset(VALORES_INICIAIS)
+    setErro('')
+    setSucesso('')
+  }
+
+  function iniciarEdicao(aula) {
+    setErro('')
+    setSucesso('')
+    setAulaEmEdicao(aula)
+
+    reset({
+      materiaId: String(aula.materiaId ?? ''),
+      data: aula.data ?? '',
+      horario: String(aula.horario ?? '').slice(0, 5),
+      duracao: String(aula.duracao ?? 1),
+      modalidade: aula.modalidade ?? '',
+      formato: aula.formato ?? 'INDIVIDUAL',
+      valorAula: String(aula.valorAula ?? ''),
+      quantidadeParticipantes: String(
+        aula.quantidadeParticipantes ??
+          (aula.formato === 'GRUPO' ? 2 : 1)
+      ),
+    })
+
+    document
+      .getElementById('titulo-formulario-aula')
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
+
   async function aoEnviar(dados) {
     setErro('')
     setSucesso('')
@@ -160,26 +197,51 @@ export default function PerfilAulasPage() {
     }
 
     try {
-      await cadastrarAula(aula)
+      if (aulaEmEdicao) {
+        await atualizarAula(aulaEmEdicao.id, aula)
+
+        setSucesso('Aula atualizada com sucesso.')
+        setAulaEmEdicao(null)
+      } else {
+        await cadastrarAula(aula)
+
+        setSucesso('Aula criada com sucesso.')
+      }
 
       reset(VALORES_INICIAIS)
-
-      setSucesso(
-        'Aula criada com sucesso. Ela já está disponível na sua área de aulas.'
-      )
-
-      setAbaSelecionada('PROXIMAS')
-      setPesquisa('')
-      setFiltroModalidade('')
-      setFiltroFormato('')
-      setPaginaAtual(1)
-
       await carregarDados()
     } catch (error) {
       setErro(
         error.message ||
-          'Não foi possível criar a aula. Verifique os dados e tente novamente.'
+          `Não foi possível ${aulaEmEdicao ? 'atualizar' : 'criar'} a aula.`
       )
+    }
+  }
+
+  async function aoExcluir(aula) {
+    const confirmado = window.confirm(
+      `Tem certeza de que deseja excluir a aula de "${aula.materiaNome || 'matéria não identificada'}" do dia ${formatarData(aula.data)}? Esta ação não poderá ser desfeita.`
+    )
+
+    if (!confirmado) return
+
+    setErro('')
+    setSucesso('')
+    setExcluindoId(aula.id)
+
+    try {
+      await excluirAula(aula.id)
+
+      if (aulaEmEdicao?.id === aula.id) {
+        cancelarEdicao()
+      }
+
+      setSucesso('Aula excluída com sucesso.')
+      await carregarDados()
+    } catch (error) {
+      setErro(error.message || 'Não foi possível excluir a aula.')
+    } finally {
+      setExcluindoId(null)
     }
   }
 
@@ -272,18 +334,34 @@ export default function PerfilAulasPage() {
       <CartaoSecao titulo="Aulas">
         <div className="perfil-aulas">
           <p className="perfil-aulas__descricao">
-            Crie aulas para disponibilizá-las aos alunos e gerencie seus
-            horários em um só lugar.
+            Crie, atualize, exclua e organize suas aulas em um só lugar.
           </p>
 
           {erro && <Aviso tipo="erro">{erro}</Aviso>}
           {sucesso && <Aviso tipo="sucesso">{sucesso}</Aviso>}
 
+          <LocalizacaoProfessor />
+
           <section
             className="perfil-aulas__formulario"
-            aria-labelledby="titulo-criar-aula"
+            aria-labelledby="titulo-formulario-aula"
           >
-            <h3 id="titulo-criar-aula">Criar aula</h3>
+            <div className="perfil-aulas__cabecalho-formulario">
+              <h3 id="titulo-formulario-aula">
+                {aulaEmEdicao ? 'Atualizar aula' : 'Criar aula'}
+              </h3>
+
+              {aulaEmEdicao && (
+                <button
+                  type="button"
+                  className="perfil-aulas__cancelar-edicao"
+                  onClick={cancelarEdicao}
+                >
+                  <IconX size="1rem" />
+                  Cancelar edição
+                </button>
+              )}
+            </div>
 
             {materias.length === 0 && !carregandoDados && (
               <Aviso tipo="info">
@@ -432,8 +510,18 @@ export default function PerfilAulasPage() {
                   carregando={isSubmitting}
                   disabled={carregandoDados || materias.length === 0}
                 >
-                  Confirmar criação da aula
+                  {aulaEmEdicao ? 'Salvar alterações' : 'Confirmar criação da aula'}
                 </Button>
+
+                {aulaEmEdicao && (
+                  <Button
+                    type="button"
+                    onClick={cancelarEdicao}
+                    disabled={isSubmitting}
+                  >
+                    Cancelar
+                  </Button>
+                )}
               </div>
             </form>
           </section>
@@ -446,13 +534,13 @@ export default function PerfilAulasPage() {
               <div>
                 <h3 id="titulo-minhas-aulas">Gerenciar minhas aulas</h3>
                 <p className="perfil-aulas__texto-apoio">
-                  Consulte, pesquise e filtre suas aulas cadastradas.
+                  Pesquise, filtre, edite ou exclua suas aulas.
                 </p>
               </div>
 
               {!carregandoDados && (
                 <span className="perfil-aulas__quantidade">
-                  {formatarQuantidade(aulas.length, 'aula cadastrada', 'aulas cadastradas')}
+                  {aulas.length} {aulas.length === 1 ? 'aula' : 'aulas'}
                 </span>
               )}
             </div>
@@ -462,31 +550,25 @@ export default function PerfilAulasPage() {
                 <span className="perfil-aulas__indicador-valor">
                   {aulasProximas.length}
                 </span>
-                <span className="perfil-aulas__indicador-label">
-                  Próximas
-                </span>
+                <span className="perfil-aulas__indicador-label">Próximas</span>
               </div>
 
               <div className="perfil-aulas__indicador">
                 <span className="perfil-aulas__indicador-valor">
                   {aulasAnteriores.length}
                 </span>
-                <span className="perfil-aulas__indicador-label">
-                  Anteriores
-                </span>
+                <span className="perfil-aulas__indicador-label">Anteriores</span>
               </div>
 
               <div className="perfil-aulas__indicador">
                 <span className="perfil-aulas__indicador-valor">
                   {aulas.length}
                 </span>
-                <span className="perfil-aulas__indicador-label">
-                  Total
-                </span>
+                <span className="perfil-aulas__indicador-label">Total</span>
               </div>
             </div>
 
-            <div className="perfil-aulas__abas" role="tablist" aria-label="Filtrar aulas por período">
+            <div className="perfil-aulas__abas" role="tablist">
               <button
                 type="button"
                 role="tab"
@@ -494,8 +576,7 @@ export default function PerfilAulasPage() {
                 className={abaSelecionada === 'PROXIMAS' ? 'ativo' : ''}
                 onClick={() => setAbaSelecionada('PROXIMAS')}
               >
-                Próximas
-                <span>{aulasProximas.length}</span>
+                Próximas ({aulasProximas.length})
               </button>
 
               <button
@@ -505,8 +586,7 @@ export default function PerfilAulasPage() {
                 className={abaSelecionada === 'ANTERIORES' ? 'ativo' : ''}
                 onClick={() => setAbaSelecionada('ANTERIORES')}
               >
-                Anteriores
-                <span>{aulasAnteriores.length}</span>
+                Anteriores ({aulasAnteriores.length})
               </button>
 
               <button
@@ -516,8 +596,7 @@ export default function PerfilAulasPage() {
                 className={abaSelecionada === 'TODAS' ? 'ativo' : ''}
                 onClick={() => setAbaSelecionada('TODAS')}
               >
-                Todas
-                <span>{aulas.length}</span>
+                Todas ({aulas.length})
               </button>
             </div>
 
@@ -563,8 +642,8 @@ export default function PerfilAulasPage() {
                   className="perfil-aulas__limpar"
                   onClick={limparFiltros}
                 >
-                  <IconX size="1rem" aria-hidden="true" />
-                  Limpar
+                  <IconX size="1rem" />
+                  Limpar filtros
                 </button>
               )}
             </div>
@@ -575,23 +654,20 @@ export default function PerfilAulasPage() {
 
             {!carregandoDados && aulasFiltradas.length === 0 && (
               <div className="perfil-aulas__vazio">
-                {aulas.length === 0 ? (
-                  <>
-                    <IconSchool size="2rem" aria-hidden="true" />
-                    <p>Você ainda não criou nenhuma aula.</p>
-                  </>
-                ) : (
-                  <>
-                    <IconFilter size="2rem" aria-hidden="true" />
-                    <p>Nenhuma aula encontrada com esses filtros.</p>
-                    <button
-                      type="button"
-                      className="perfil-aulas__limpar"
-                      onClick={limparFiltros}
-                    >
-                      Limpar filtros
-                    </button>
-                  </>
+                <IconSchool size="2rem" aria-hidden="true" />
+                <p>
+                  {aulas.length === 0
+                    ? 'Você ainda não criou nenhuma aula.'
+                    : 'Nenhuma aula encontrada com esses filtros.'}
+                </p>
+                {existemFiltrosAtivos && (
+                  <button
+                    type="button"
+                    className="perfil-aulas__limpar"
+                    onClick={limparFiltros}
+                  >
+                    Limpar filtros
+                  </button>
                 )}
               </div>
             )}
@@ -600,11 +676,7 @@ export default function PerfilAulasPage() {
               <>
                 <div className="perfil-aulas__resultado">
                   Exibindo{' '}
-                  {Math.min(
-                    (paginaAtual - 1) * ITENS_POR_PAGINA + 1,
-                    aulasFiltradas.length
-                  )}{' '}
-                  a{' '}
+                  {(paginaAtual - 1) * ITENS_POR_PAGINA + 1} a{' '}
                   {Math.min(
                     paginaAtual * ITENS_POR_PAGINA,
                     aulasFiltradas.length
@@ -613,56 +685,73 @@ export default function PerfilAulasPage() {
                 </div>
 
                 <ul className="perfil-aulas__lista">
-                  {aulasPaginadas.map((aula) => {
-                    const futura = aulaAindaVaiAcontecer(aula)
-
-                    return (
-                      <li className="perfil-aulas__item" key={aula.id}>
-                        <div className="perfil-aulas__item-cabecalho">
-                          <div className="perfil-aulas__informacoes">
-                            <h4>
-                              {aula.materiaNome ||
-                                'Aula sem matéria identificada'}
-                            </h4>
-                          </div>
-
-                          <span
-                            className={`perfil-aulas__status ${
-                              futura
-                                ? 'perfil-aulas__status--futura'
-                                : 'perfil-aulas__status--anterior'
-                            }`}
-                          >
-                            {futura ? 'Próxima' : 'Data passada'}
-                          </span>
+                  {aulasPaginadas.map((aula) => (
+                    <li className="perfil-aulas__item" key={aula.id}>
+                      <div className="perfil-aulas__item-cabecalho">
+                        <div className="perfil-aulas__informacoes">
+                          <h4>
+                            {aula.materiaNome ||
+                              'Aula sem matéria identificada'}
+                          </h4>
                         </div>
 
-                        <div className="perfil-aulas__detalhes">
-                          <p>
-                            <IconCalendarEvent size="1rem" aria-hidden="true" />
-                            {formatarData(aula.data)}
-                          </p>
+                        <span
+                          className={`perfil-aulas__status ${
+                            aulaAindaVaiAcontecer(aula)
+                              ? 'perfil-aulas__status--futura'
+                              : 'perfil-aulas__status--anterior'
+                          }`}
+                        >
+                          {aulaAindaVaiAcontecer(aula)
+                            ? 'Próxima'
+                            : 'Data passada'}
+                        </span>
+                      </div>
 
-                          <p>
-                            <IconClock size="1rem" aria-hidden="true" />
-                            {formatarHorario(aula.horario)} · {aula.duracao}{' '}
-                            {aula.duracao === 1 ? 'hora' : 'horas'}
-                          </p>
-                        </div>
-
-                        <p className="perfil-aulas__modalidade">
-                          {aula.modalidade === 'ONLINE'
-                            ? 'Online'
-                            : 'Presencial'}{' '}
-                          ·{' '}
-                          {aula.formato === 'GRUPO'
-                            ? 'Em grupo'
-                            : 'Individual'}{' '}
-                          · {formatarMoeda(aula.valorAula)} por hora-aula
+                      <div className="perfil-aulas__detalhes">
+                        <p>
+                          <IconCalendarEvent size="1rem" aria-hidden="true" />
+                          {formatarData(aula.data)}
                         </p>
-                      </li>
-                    )
-                  })}
+
+                        <p>
+                          <IconClock size="1rem" aria-hidden="true" />
+                          {formatarHorario(aula.horario)} · {aula.duracao}{' '}
+                          {aula.duracao === 1 ? 'hora' : 'horas'}
+                        </p>
+                      </div>
+
+                      <p className="perfil-aulas__modalidade">
+                        {aula.modalidade === 'ONLINE' ? 'Online' : 'Presencial'}
+                        {' · '}
+                        {aula.formato === 'GRUPO' ? 'Em grupo' : 'Individual'}
+                        {' · '}
+                        {formatarMoeda(aula.valorAula)} por hora-aula
+                      </p>
+
+                      <div className="perfil-aulas__acoes-item">
+                        <button
+                          type="button"
+                          className="perfil-aulas__botao-editar"
+                          onClick={() => iniciarEdicao(aula)}
+                          disabled={excluindoId === aula.id}
+                        >
+                          <IconEdit size="1rem" />
+                          Editar
+                        </button>
+
+                        <button
+                          type="button"
+                          className="perfil-aulas__botao-excluir"
+                          onClick={() => aoExcluir(aula)}
+                          disabled={excluindoId === aula.id}
+                        >
+                          <IconTrash size="1rem" />
+                          {excluindoId === aula.id ? 'Excluindo...' : 'Excluir'}
+                        </button>
+                      </div>
+                    </li>
+                  ))}
                 </ul>
 
                 {totalPaginas > 1 && (

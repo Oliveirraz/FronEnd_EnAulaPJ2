@@ -15,8 +15,6 @@ export class ApiError extends Error {
 // TRATAMENTO DE ERROS
 // =====================================================
 
-// O backend pode devolver texto puro em alguns erros.
-// Exemplo: "Email já cadastrado".
 async function lerMensagemDoServidor(resposta) {
   const texto = await resposta.text().catch(() => '')
 
@@ -27,8 +25,6 @@ async function lerMensagemDoServidor(resposta) {
 // CADASTRO DE ALUNO E PROFESSOR
 // =====================================================
 
-// As rotas de cadastro recebem multipart/form-data.
-// O navegador define automaticamente o Content-Type e o boundary.
 async function enviarCadastro(rota, nomeDaParte, dados, foto) {
   const formData = new FormData()
 
@@ -70,7 +66,6 @@ export function cadastrarProfessor(dados, foto) {
 // AUTENTICAÇÃO
 // =====================================================
 
-// Login: o backend espera email, senha e tipo.
 export async function entrar({ email, senha, tipo }) {
   const resposta = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
@@ -98,7 +93,6 @@ export async function entrar({ email, senha, tipo }) {
 // REQUISIÇÕES AUTENTICADAS
 // =====================================================
 
-// Envia o token JWT nas requisições privadas.
 async function requisicaoAutenticada(caminho, opcoes = {}) {
   const token = lerSessao()?.token
 
@@ -158,11 +152,21 @@ export function excluirProfessor(id) {
   })
 }
 
+// Atualiza a localização do professor autenticado.
+export function atualizarMinhaLocalizacaoProfessor(dados) {
+  return requisicaoAutenticada('/api/professores/minha-localizacao', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dados),
+  })
+}
+
 // =====================================================
 // TABELA DE PREÇOS
 // =====================================================
 
-// Rota pública: utilizada antes do login.
 export async function buscarTabelaPrecos() {
   const resposta = await fetch(`${API_URL}/api/tabela-precos`)
 
@@ -180,12 +184,10 @@ export async function buscarTabelaPrecos() {
 // MATÉRIAS - HU05
 // =====================================================
 
-// Lista as matérias cadastradas pelo professor logado.
 export function listarMaterias() {
   return requisicaoAutenticada('/api/materias')
 }
 
-// Cadastra uma nova matéria.
 export function cadastrarMateria(dados) {
   return requisicaoAutenticada('/api/materias', {
     method: 'POST',
@@ -196,12 +198,10 @@ export function cadastrarMateria(dados) {
   })
 }
 
-// Busca uma matéria específica.
 export function buscarMateria(id) {
   return requisicaoAutenticada(`/api/materias/${id}`)
 }
 
-// Atualiza uma matéria existente.
 export function atualizarMateria(id, dados) {
   return requisicaoAutenticada(`/api/materias/${id}`, {
     method: 'PUT',
@@ -212,7 +212,6 @@ export function atualizarMateria(id, dados) {
   })
 }
 
-// Exclui uma matéria.
 export function excluirMateria(id) {
   return requisicaoAutenticada(`/api/materias/${id}`, {
     method: 'DELETE',
@@ -220,15 +219,13 @@ export function excluirMateria(id) {
 }
 
 // =====================================================
-// AULAS - CRIAÇÃO E LISTAGEM
+// AULAS - CRIAÇÃO, LISTAGEM, ATUALIZAÇÃO E EXCLUSÃO
 // =====================================================
 
-// Lista as aulas cadastradas.
 export function listarAulas() {
   return requisicaoAutenticada('/api/aulas')
 }
 
-// Cadastra uma nova aula.
 export function cadastrarAula(dados) {
   return requisicaoAutenticada('/api/aulas', {
     method: 'POST',
@@ -239,11 +236,28 @@ export function cadastrarAula(dados) {
   })
 }
 
+// Atualiza uma aula existente.
+export function atualizarAula(id, dados) {
+  return requisicaoAutenticada(`/api/aulas/${id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(dados),
+  })
+}
+
+// Exclui uma aula.
+export function excluirAula(id) {
+  return requisicaoAutenticada(`/api/aulas/${id}`, {
+    method: 'DELETE',
+  })
+}
+
 // =====================================================
 // MATERIAIS DE APOIO - HU10
 // =====================================================
 
-// Lista os materiais vinculados a uma aula.
 export function listarMateriaisDaAula(aulaId) {
   if (!aulaId) {
     return Promise.reject(
@@ -256,7 +270,6 @@ export function listarMateriaisDaAula(aulaId) {
   )
 }
 
-// Envia um arquivo de apoio para uma aula.
 export function enviarMaterialAula(aulaId, arquivo) {
   if (!aulaId || !arquivo) {
     return Promise.reject(
@@ -277,7 +290,6 @@ export function enviarMaterialAula(aulaId, arquivo) {
   )
 }
 
-// Remove um material enviado.
 export function excluirMaterialApoio(materialId) {
   if (!materialId) {
     return Promise.reject(
@@ -297,8 +309,6 @@ export function excluirMaterialApoio(materialId) {
 // BUSCA DE AULAS - HU05
 // =====================================================
 
-// O backend obtém latitude e longitude do aluno autenticado.
-// O raio padrão é 5 km para presencial e 100 km para online.
 export function buscarAulas(filtros = {}) {
   const parametros = new URLSearchParams()
 

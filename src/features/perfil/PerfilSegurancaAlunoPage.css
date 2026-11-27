@@ -1,0 +1,69 @@
+/* src/features/perfil/PerfilSegurancaAlunoPage.css */
+
+.perfil-seguranca-aluno {
+  display: grid;
+  gap: var(--espaco-6);
+}
+
+.perfil-seguranca-aluno__introducao {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  border: 1px solid rgb(49 89 184 / 15%);
+  border-radius: var(--raio);
+  background: linear-gradient(110deg, rgb(49 89 184 / 9%), rgb(118 85 200 / 5%) 70%, transparent);
+}
+
+.perfil-seguranca-aluno__introducao h1 {
+  margin: 0 0 var(--espaco-1);
+  color: #203d7a;
+  font-size: var(--texto-grande);
+}
+
+.perfil-seguranca-aluno__introducao p {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.perfil-seguranca-aluno__icone {
+  display: grid;
+  flex: 0 0 2.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  color: #fff;
+  background: linear-gradient(135deg, #3159b8, #7655c8);
+  border-radius: 0.85rem;
+  box-shadow: 0 5px 14px rgb(49 89 184 / 20%);
+}
+
+.perfil-seguranca-aluno__formulario {
+  display: grid;
+  gap: var(--espaco-4);
+}
+
+.perfil-seguranca-aluno .perfil__acoes {
+  margin-top: var(--espaco-2);
+}
+
+@media (max-width: 480px) {
+  .perfil-seguranca-aluno__introducao {
+    align-items: flex-start;
+  }
+
+  .perfil-seguranca-aluno__introducao h1 {
+    font-size: var(--texto-medio);
+  }
+}
+
+.perfil-seguranca-aluno__botao-secundario {
+  color: #3159b8;
+  background: #fff;
+  border: 1px solid #3159b8;
+}
+
+.perfil-seguranca-aluno__botao-secundario:hover:not(:disabled) {
+  color: #203d7a;
+  background: #edf2ff;
+}

@@ -1,3 +1,4 @@
+// src/layouts/LayoutPerfilAluno.jsx
 
 import { IconLogout } from '@tabler/icons-react'
 import { Outlet, useNavigate } from 'react-router-dom'
@@ -8,16 +9,13 @@ import { lerSessao, limparSessao } from '../services/sessao.js'
 import './LayoutPerfil.css'
 import useAluno from '../hooks/useAluno.js'
 
-
 const ABAS = [
   { para: 'dados', texto: 'Dados' },
   { para: 'buscar-aulas', texto: 'Buscar aulas' },
-  { para: 'selecionar-aulas', texto: 'Selecionar aulas' },
   { para: 'aulas', texto: 'Aulas' },
   { para: 'materiais', texto: 'Materiais' },
   { para: 'seguranca', texto: 'Segurança' },
 ]
-
 
 export default function LayoutPerfilAluno() {
   const navigate = useNavigate()
@@ -35,7 +33,7 @@ export default function LayoutPerfilAluno() {
   return (
     <div className="layout-perfil">
       <aside
-        className="layout-perfil__painel fundo-quadro"
+        className="layout-perfil__painel layout-perfil__painel--gradiente fundo-quadro"
         aria-label="Resumo do perfil"
       >
         <Avatar

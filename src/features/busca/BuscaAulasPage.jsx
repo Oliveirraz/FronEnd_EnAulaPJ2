@@ -1,13 +1,13 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { IconMapPin, IconSearch, IconX } from '@tabler/icons-react'
+import { IconMapPin, IconSearch, IconX, IconCheck } from '@tabler/icons-react'
 
 import Aviso from '../../components/ui/Aviso.jsx'
 import Button from '../../components/ui/Button.jsx'
 import CartaoSecao from '../../components/ui/CartaoSecao.jsx'
 import Input from '../../components/ui/Input.jsx'
 import Select from '../../components/ui/Select.jsx'
-import { buscarAulas } from '../../services/api.js'
+import { buscarAulas, solicitarMatricula } from '../../services/api.js'
 import { formatarMoeda } from '../../utils/formatadores.js'
 import LocalizacaoAluno from './LocalizacaoAluno.jsx'
 
@@ -45,6 +45,10 @@ export default function BuscaAulasPage() {
   const [erro, setErro] = useState('')
   const [mensagem, setMensagem] = useState('')
   const [localizacaoPendente, setLocalizacaoPendente] = useState(false)
+  const [selecionadas, setSelecionadas] = useState([])
+  const [salvandoSelecao, setSalvandoSelecao] = useState(false)
+  const [erroSelecao, setErroSelecao] = useState('')
+  const [sucessoSelecao, setSucessoSelecao] = useState('')
 
   const carregarAulas = useCallback(
     async (filtrosAplicados = FILTROS_INICIAIS, atualizarCatalogo = false) => {
@@ -161,6 +165,33 @@ export default function BuscaAulasPage() {
     await carregarAulas(FILTROS_INICIAIS, true)
   }
 
+  function alternarSelecao(aulaId) {
+    setSelecionadas((atuais) => atuais.includes(aulaId)
+      ? atuais.filter((id) => id !== aulaId)
+      : [...atuais, aulaId])
+    setErroSelecao('')
+    setSucessoSelecao('')
+  }
+
+  async function enviarSolicitacoes() {
+    if (!selecionadas.length) {
+      setErroSelecao('Selecione pelo menos uma aula para solicitar matrícula.')
+      return
+    }
+    setSalvandoSelecao(true)
+    setErroSelecao('')
+    setSucessoSelecao('')
+    const ids = [...selecionadas]
+    const resultados = await Promise.allSettled(ids.map((id) => solicitarMatricula(id)))
+    const sucessos = resultados.filter((r) => r.status === 'fulfilled').length
+    const falhas = resultados.length - sucessos
+    const falharam = ids.filter((id, i) => resultados[i].status === 'rejected')
+    setSelecionadas(falharam ? falharam : [])
+    if (sucessos) setSucessoSelecao(`${sucessos} solicitação(ões) enviada(s). Aguarde a resposta do professor.`)
+    if (falhas) setErroSelecao(`${falhas} solicitação(ões) não foram enviadas. Confira se já solicitou matrícula nessas aulas.`)
+    setSalvandoSelecao(false)
+  }
+
   const raioDescricao =
     filtros.modalidade === 'PRESENCIAL'
       ? 'Raio aplicado: 5 km'
@@ -272,6 +303,20 @@ export default function BuscaAulasPage() {
               </div>
             </form>
 
+            {selecionadas.length > 0 && (
+              <section className="busca-aulas__barra-selecao" aria-live="polite">
+                <div>
+                  <strong>{selecionadas.length} aula(s) selecionada(s)</strong>
+                  <p>Envie suas solicitações e aguarde a confirmação dos professores.</p>
+                </div>
+                <Button type="button" carregando={salvandoSelecao} onClick={enviarSolicitacoes}>
+                  <IconCheck size="1.1rem" /> Solicitar matrículas
+                </Button>
+              </section>
+            )}
+            {erroSelecao && <Aviso tipo="erro">{erroSelecao}</Aviso>}
+            {sucessoSelecao && <Aviso tipo="sucesso">{sucessoSelecao}</Aviso>}
+
             <section
               className="busca-aulas__resultados"
               aria-labelledby="titulo-resultados"
@@ -305,15 +350,19 @@ export default function BuscaAulasPage() {
                 <div className="busca-aulas__lista">
                   {resultados.map((aula) => (
                     <article
-                      className="busca-aulas__card"
+                      className={`busca-aulas__card ${selecionadas.includes(aula.aulaId) ? 'busca-aulas__card--selecionada' : ''}`}
                       key={aula.aulaId}
                     >
+                      <label className="busca-aulas__selecao">
+                        <input type="checkbox" checked={selecionadas.includes(aula.aulaId)} onChange={() => alternarSelecao(aula.aulaId)} disabled={salvandoSelecao} />
+                        <span>Selecionar para solicitar matrícula</span>
+                      </label>
                       <div className="busca-aulas__card-topo">
                         <div>
                           <h3>{aula.materia}</h3>
 
                           <p className="busca-aulas__professor">
-                            Monitor: {aula.nomeProfessor}
+                            Professor: {aula.nomeProfessor}
                           </p>
                         </div>
 

@@ -7,6 +7,7 @@ import {
   IconFileTypeDoc,
   IconTrash,
   IconUpload,
+  IconDownload,
 } from '@tabler/icons-react'
 
 import Aviso from '../../components/ui/Aviso.jsx'
@@ -19,6 +20,7 @@ import {
   enviarMaterialAula,
   listarAulas,
   listarMateriaisDaAula,
+  baixarMaterialApoio,
 } from '../../services/api.js'
 
 import './PerfilMateriaisPage.css'
@@ -106,6 +108,7 @@ export default function PerfilMateriaisPage() {
   const [carregandoMateriais, setCarregandoMateriais] = useState(false)
   const [enviando, setEnviando] = useState(false)
   const [removendoId, setRemovendoId] = useState(null)
+  const [baixandoId, setBaixandoId] = useState(null)
 
   const [erro, setErro] = useState('')
   const [sucesso, setSucesso] = useState('')
@@ -246,9 +249,39 @@ export default function PerfilMateriaisPage() {
     }
   }
 
+  // BAIXAR MATERIAL
+  async function aoBaixar(material) {
+    const nome =
+      material.nomeOriginal ||
+      material.nome ||
+      'material'
+
+    setErro('')
+    setSucesso('')
+    setBaixandoId(material.id)
+
+    try {
+      await baixarMaterialApoio(material.id, nome)
+
+      setSucesso(
+        `Download de "${nome}" iniciado.`,
+      )
+    } catch (error) {
+      setErro(
+        error.message ||
+          'Não foi possível baixar o material.',
+      )
+    } finally {
+      setBaixandoId(null)
+    }
+  }
+
   // Exclui um material.
   async function aoRemover(material) {
-    const nome = material.nomeOriginal || material.nome || 'este material'
+    const nome =
+      material.nomeOriginal ||
+      material.nome ||
+      'este material'
 
     const confirmou = window.confirm(
       `Deseja realmente remover o material "${nome}"?`,
@@ -284,7 +317,9 @@ export default function PerfilMateriaisPage() {
     .map((aula) => ({
       valor: String(aula.id),
       texto: [
-        aula.materiaNome || aula.materia?.nome || `Aula ${aula.id}`,
+        aula.materiaNome ||
+          aula.materia?.nome ||
+          `Aula ${aula.id}`,
         aula.data || aula.dataAula || '',
       ]
         .filter(Boolean)
@@ -442,11 +477,34 @@ export default function PerfilMateriaisPage() {
                           </span>
                         </div>
 
+                        {/* BOTÃO BAIXAR */}
+                        <Button
+                          disabled={
+                            baixandoId === material.id ||
+                            removendoId === material.id ||
+                            enviando
+                          }
+                          onClick={() => aoBaixar(material)}
+                          aria-label={`Baixar ${nome}`}
+                        >
+                          <IconDownload
+                            size="1.1rem"
+                            aria-hidden="true"
+                          />
+
+                          {baixandoId === material.id
+                            ? 'Baixando...'
+                            : 'Baixar'}
+                        </Button>
+
+                        {/* BOTÃO REMOVER */}
                         <Button
                           variante="perigo"
                           className="perfil-materiais__remover"
                           disabled={
-                            removendoId === material.id || enviando
+                            removendoId === material.id ||
+                            baixandoId === material.id ||
+                            enviando
                           }
                           onClick={() => aoRemover(material)}
                           aria-label={`Remover ${nome}`}

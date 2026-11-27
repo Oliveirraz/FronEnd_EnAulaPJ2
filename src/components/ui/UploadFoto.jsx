@@ -1,3 +1,5 @@
+// src/components/ui/UploadFoto.jsx
+
 import { IconCamera, IconUser } from '@tabler/icons-react'
 import { useEffect, useId, useRef, useState } from 'react'
 import './UploadFoto.css'
@@ -6,7 +8,7 @@ import './UploadFoto.css'
 const TIPOS_PERMITIDOS = ['image/jpeg', 'image/png', 'image/webp']
 const TAMANHO_MAXIMO = 2 * 1024 * 1024
 
-export default function UploadFoto({ aoMudar }) {
+export default function UploadFoto({ aoMudar, fotoAtual = null }) {
   const id = useId()
   const ajudaId = `${id}-ajuda`
   const erroId = `${id}-erro`
@@ -35,10 +37,12 @@ export default function UploadFoto({ aoMudar }) {
       descartar()
       return
     }
+
     if (!TIPOS_PERMITIDOS.includes(arquivo.type)) {
       descartar('Use uma imagem JPG, PNG ou WEBP.')
       return
     }
+
     if (arquivo.size > TAMANHO_MAXIMO) {
       descartar('A imagem deve ter no máximo 2 MB.')
       return
@@ -61,8 +65,13 @@ export default function UploadFoto({ aoMudar }) {
         onClick={() => entradaRef.current?.click()}
       >
         <span className="upload-foto__previa">
-          {previa ? <img src={previa} alt="" /> : <IconUser size="2.5rem" />}
+          {previa || fotoAtual ? (
+            <img src={previa || fotoAtual} alt="" />
+          ) : (
+            <IconUser size="2.5rem" />
+          )}
         </span>
+
         <span className="upload-foto__camera">
           <IconCamera size="0.95rem" />
         </span>
@@ -72,6 +81,7 @@ export default function UploadFoto({ aoMudar }) {
         <label className="upload-foto__rotulo" htmlFor={id}>
           Foto de perfil (opcional)
         </label>
+
         <input
           ref={entradaRef}
           id={id}
@@ -81,16 +91,23 @@ export default function UploadFoto({ aoMudar }) {
           onChange={aoEscolherArquivo}
           aria-describedby={erro ? `${ajudaId} ${erroId}` : ajudaId}
         />
+
         <p id={ajudaId} className="upload-foto__ajuda">
           JPG, PNG ou WEBP, até 2 MB.
         </p>
+
         {erro && (
           <p id={erroId} className="upload-foto__erro" role="alert">
             {erro}
           </p>
         )}
+
         {previa && (
-          <button type="button" className="upload-foto__remover" onClick={() => descartar()}>
+          <button
+            type="button"
+            className="upload-foto__remover"
+            onClick={() => descartar()}
+          >
             Remover foto
           </button>
         )}

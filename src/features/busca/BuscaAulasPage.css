@@ -214,3 +214,38 @@
     grid-column: auto;
   }
 }
+
+/* Seleção de matrícula integrada à busca */
+.busca-aulas__card--selecionada {
+  border-color: var(--cor-destaque, #6b56c8);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--cor-destaque, #6b56c8) 18%, transparent);
+}
+.busca-aulas__selecao {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding-bottom: var(--espaco-2);
+  border-bottom: var(--borda);
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+  cursor: pointer;
+}
+.busca-aulas__selecao input {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex: 0 0 auto;
+  accent-color: var(--cor-destaque, #6b56c8);
+}
+.busca-aulas__barra-selecao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  border: 1px solid var(--cor-destaque, #6b56c8);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+.busca-aulas__barra-selecao p { margin: var(--espaco-1) 0 0; color: var(--cor-tinta-suave); }
+.busca-aulas__barra-selecao button { max-width: 100%; }

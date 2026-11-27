@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import {
   IconBook2,
@@ -33,6 +33,9 @@ export default function PerfilMateriasPage() {
   const [sucesso, setSucesso] = useState('')
   const [materiaEditando, setMateriaEditando] = useState(null)
   const [excluindo, setExcluindo] = useState(null)
+  const [busca, setBusca] = useState('')
+  const [pagina, setPagina] = useState(1)
+  const ITENS_POR_PAGINA = 10
 
   const {
     register,
@@ -136,6 +139,16 @@ export default function PerfilMateriasPage() {
       setExcluindo(null)
     }
   }
+
+  const materiasFiltradas = useMemo(() => {
+    const termo = busca.trim().toLocaleLowerCase('pt-BR')
+    return materias.filter((materia) =>
+      !termo || `${materia.nome ?? ''} ${materia.descricao ?? ''}`.toLocaleLowerCase('pt-BR').includes(termo)
+    ).sort((a, b) => (a.nome ?? '').localeCompare(b.nome ?? '', 'pt-BR'))
+  }, [materias, busca])
+  const totalPaginas = Math.max(1, Math.ceil(materiasFiltradas.length / ITENS_POR_PAGINA))
+  const paginaAtual = Math.min(pagina, totalPaginas)
+  const materiasDaPagina = materiasFiltradas.slice((paginaAtual - 1) * ITENS_POR_PAGINA, paginaAtual * ITENS_POR_PAGINA)
 
   return (
     <>
@@ -247,6 +260,20 @@ export default function PerfilMateriasPage() {
               )}
             </div>
 
+            {!carregando && materias.length > 0 && (
+              <div className="materias__busca">
+                <label htmlFor="busca-materias">Buscar matéria</label>
+                <input
+                  id="busca-materias"
+                  type="search"
+                  value={busca}
+                  onChange={(evento) => { setBusca(evento.target.value); setPagina(1) }}
+                  placeholder="Digite o nome ou conteúdo da matéria"
+                />
+                <small>{materiasFiltradas.length} resultado(s)</small>
+              </div>
+            )}
+
             {carregando && (
               <p role="status">Carregando suas matérias...</p>
             )}
@@ -258,9 +285,14 @@ export default function PerfilMateriasPage() {
               </div>
             )}
 
-            {!carregando && materias.length > 0 && (
+            {!carregando && materias.length > 0 && materiasFiltradas.length === 0 && (
+              <div className="materias__vazio"><p>Nenhuma matéria corresponde à busca.</p></div>
+            )}
+
+            {!carregando && materiasFiltradas.length > 0 && (
+              <>
               <ul className="materias__lista">
-                {materias.map((materia) => (
+                {materiasDaPagina.map((materia) => (
                   <li className="materias__item" key={materia.id}>
                     <div className="materias__informacoes">
                       <h4>{materia.nome}</h4>
@@ -292,6 +324,15 @@ export default function PerfilMateriasPage() {
                   </li>
                 ))}
               </ul>
+              <nav className="materias__paginacao" aria-label="Paginação de matérias">
+                <span>Exibindo {(paginaAtual - 1) * ITENS_POR_PAGINA + 1}–{Math.min(paginaAtual * ITENS_POR_PAGINA, materiasFiltradas.length)} de {materiasFiltradas.length}</span>
+                <div>
+                  <button type="button" onClick={() => setPagina((p) => Math.max(1, p - 1))} disabled={paginaAtual <= 1}>Anterior</button>
+                  <span>Página {paginaAtual} de {totalPaginas}</span>
+                  <button type="button" onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))} disabled={paginaAtual >= totalPaginas}>Próxima</button>
+                </div>
+              </nav>
+              </>
             )}
           </section>
         </div>

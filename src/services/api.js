@@ -1,4 +1,3 @@
-
 import { lerSessao } from './sessao.js'
 
 const API_URL = import.meta.env.VITE_API_URL ?? ''
@@ -17,7 +16,6 @@ export class ApiError extends Error {
 
 async function lerMensagemDoServidor(resposta) {
   const texto = await resposta.text().catch(() => '')
-
   return texto.trimStart().startsWith('{') ? '' : texto.trim()
 }
 
@@ -116,7 +114,6 @@ async function requisicaoAutenticada(caminho, opcoes = {}) {
   }
 
   const texto = await resposta.text()
-
   return texto ? JSON.parse(texto) : null
 }
 
@@ -129,15 +126,12 @@ export function buscarAluno(id) {
 }
 
 // =====================================================
-// PROFESSORES
+// ALUNOS
 // =====================================================
 
-export function buscarProfessor(id) {
-  return requisicaoAutenticada(`/api/professores/${id}`)
-}
 
-export function atualizarProfessor(id, dados) {
-  return requisicaoAutenticada(`/api/professores/${id}`, {
+export function atualizarAluno(id, dados) {
+  return requisicaoAutenticada(`/api/alunos/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -146,6 +140,65 @@ export function atualizarProfessor(id, dados) {
   })
 }
 
+export function enviarFotoAluno(id, arquivo) {
+  const formData = new FormData()
+  formData.append('arquivo', arquivo)
+
+  return requisicaoAutenticada(`/api/alunos/${id}/foto`, {
+    method: 'POST',
+    body: formData,
+  })
+}
+
+export function excluirFotoAluno(id) {
+  return requisicaoAutenticada(`/api/alunos/${id}/foto`, {
+    method: 'DELETE',
+  })
+}
+
+export function excluirAluno(id) {
+  return requisicaoAutenticada(`/api/alunos/${id}`, {
+    method: 'DELETE',
+  })
+}
+
+// =====================================================
+// PROFESSORES
+// =====================================================
+
+export function buscarProfessor(id) {
+  return requisicaoAutenticada(`/api/professores/${id}`)
+}
+
+export function atualizarProfessor(id, dados, foto = null) {
+  // Atualização somente dos dados, sem alterar a foto.
+  if (!foto) {
+    return requisicaoAutenticada(`/api/professores/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(dados),
+    })
+  }
+
+  // Atualização dos dados junto com a foto.
+  const formData = new FormData()
+
+  formData.append(
+    'professor',
+    new Blob([JSON.stringify(dados)], {
+      type: 'application/json',
+    })
+  )
+
+  formData.append('foto', foto)
+
+  return requisicaoAutenticada(`/api/professores/${id}`, {
+    method: 'PUT',
+    body: formData,
+  })
+}
 export function excluirProfessor(id) {
   return requisicaoAutenticada(`/api/professores/${id}`, {
     method: 'DELETE',
@@ -278,7 +331,6 @@ export function enviarMaterialAula(aulaId, arquivo) {
   }
 
   const formData = new FormData()
-
   formData.append('arquivo', arquivo)
 
   return requisicaoAutenticada(
@@ -288,6 +340,50 @@ export function enviarMaterialAula(aulaId, arquivo) {
       body: formData,
     }
   )
+}
+
+export async function baixarMaterialApoio(
+  materialId,
+  nomeArquivo = 'material'
+) {
+  if (!materialId) {
+    throw new Error('Informe o material que deseja baixar.')
+  }
+
+  const token = lerSessao()?.token
+
+  const resposta = await fetch(
+    `${API_URL}/api/materiais/${encodeURIComponent(materialId)}/download`,
+    {
+      headers: token
+        ? { Authorization: `Bearer ${token}` }
+        : {},
+    }
+  )
+
+  if (!resposta.ok) {
+    throw new ApiError(
+      resposta.status,
+      await lerMensagemDoServidor(resposta)
+    )
+  }
+
+  const blob = await resposta.blob()
+  const url = URL.createObjectURL(blob)
+
+  const link = document.createElement('a')
+  link.href = url
+  link.download = nomeArquivo || 'material'
+
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
+
+export function listarMeusMateriais() {
+  return requisicaoAutenticada('/api/materiais/meus')
 }
 
 export function excluirMaterialApoio(materialId) {
@@ -428,6 +524,7 @@ export function recusarMatricula(matriculaId, motivo) {
     }
   )
 }
+
 // =====================================================
 // HU012 - HISTÓRICO COMPLETO DE MATRÍCULAS
 // =====================================================

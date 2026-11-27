@@ -1,3 +1,4 @@
+// src/layouts/LayoutPerfil.jsx
 
 import { IconCash, IconCertificate, IconLogout } from '@tabler/icons-react'
 import { Outlet, useNavigate } from 'react-router-dom'
@@ -37,7 +38,10 @@ export default function LayoutPerfil() {
 
   return (
     <div className="layout-perfil">
-      <aside className="layout-perfil__painel fundo-quadro" aria-label="Resumo do perfil">
+      <aside
+        className="layout-perfil__painel layout-perfil__painel--gradiente fundo-quadro"
+        aria-label="Resumo do perfil"
+      >
         <Avatar
           key={professor?.fotoUrl ?? 'sem-foto'}
           src={professor?.fotoUrl}
@@ -62,7 +66,8 @@ export default function LayoutPerfil() {
             <ul className="layout-perfil__resumo">
               <li>
                 <IconCertificate size="1.25rem" aria-hidden="true" />
-                {rotuloDaTitulacao(professor.titulacao) || 'Titulação não informada'}
+                {rotuloDaTitulacao(professor.titulacao) ||
+                  'Titulação não informada'}
               </li>
 
               <li>

@@ -1,3 +1,5 @@
+/* src/components/ui/NavegacaoAbas.css */
+
 .abas {
   display: flex;
   gap: var(--espaco-3);
@@ -17,16 +19,22 @@
   color: var(--cor-tinta-suave);
   text-decoration: none;
   border-bottom: 3px solid transparent;
+  transition: color 160ms ease, border-color 160ms ease;
 }
 
 .abas__link:hover {
-  color: var(--cor-tinta);
+  color: #3159b8;
 }
 
-/* Aba atual: texto escuro e sublinhado índigo (não depende só de cor) */
+/* Aba atual: texto escuro e sublinhado índigo */
 .abas__link[aria-current='page'] {
   color: var(--cor-tinta);
-  border-bottom-color: var(--cor-quadro);
+  color: #203d7a;
+  border-bottom-color: transparent;
+  background-image: linear-gradient(90deg, #3159b8, #7655c8);
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: 100% 3px;
 }
 
 @media (min-width: 600px) {
@@ -39,7 +47,7 @@
   }
 }
 
-/* O contorno de foco fica por dentro para não ser cortado pela rolagem horizontal */
+/* O foco fica dentro para não ser cortado pela rolagem horizontal */
 .abas__link:focus-visible {
   outline-offset: -3px;
 }

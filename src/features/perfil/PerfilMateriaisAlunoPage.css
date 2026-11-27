@@ -1,0 +1,98 @@
+
+.materiais-aluno {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4);
+}
+
+.materiais-aluno__descricao {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.materiais-aluno__busca {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  width: 100%;
+  padding: var(--espaco-3);
+  border: var(--borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.materiais-aluno__busca input {
+  width: 100%;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
+.materiais-aluno__lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.materiais-aluno__item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  border: var(--borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.materiais-aluno__detalhes {
+  display: flex;
+  flex: 1 1 14rem;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--espaco-1);
+}
+
+.materiais-aluno__detalhes strong,
+.materiais-aluno__detalhes span,
+.materiais-aluno__detalhes small {
+  overflow-wrap: anywhere;
+}
+
+.materiais-aluno__detalhes span,
+.materiais-aluno__detalhes small {
+  font-size: var(--texto-pequeno);
+  color: var(--cor-tinta-suave);
+}
+
+.materiais-aluno__vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-6);
+  border: var(--borda);
+  border-radius: var(--raio);
+  color: var(--cor-tinta-suave);
+}
+
+.materiais-aluno__vazio p {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .materiais-aluno__item {
+    align-items: flex-start;
+  }
+
+  .materiais-aluno__item button {
+    width: 100%;
+  }
+}

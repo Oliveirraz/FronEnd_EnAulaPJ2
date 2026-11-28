@@ -459,6 +459,16 @@ export function solicitarMatricula(aulaId) {
 }
 
 // =====================================================
+// MATRÍCULAS DO ALUNO - HU18
+// =====================================================
+
+// Lista as solicitações do aluno autenticado.
+// O backend deve identificar o aluno pelo token JWT.
+export function listarMinhasMatriculas() {
+  return requisicaoAutenticada('/api/matriculas/minhas')
+}
+
+// =====================================================
 // GERENCIAMENTO DE MATRÍCULAS - HU11
 // =====================================================
 

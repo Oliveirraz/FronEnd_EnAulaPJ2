@@ -1,0 +1,172 @@
+
+.matriculas-aluno {
+  width: 100%;
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.matriculas-aluno__conteudo {
+  display: grid;
+  gap: var(--espaco-4);
+}
+
+.matriculas-aluno__descricao {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.matriculas-aluno__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
+}
+
+.matriculas-aluno__resumo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+}
+
+.matriculas-aluno__resumo span {
+  padding: var(--espaco-2) var(--espaco-3);
+  border: var(--borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  font-size: var(--texto-pequeno);
+}
+
+.matriculas-aluno__resumo strong {
+  color: var(--cor-quadro);
+}
+
+.matriculas-aluno__cabecalho .botao {
+  width: auto;
+  min-width: 0;
+}
+
+.matriculas-aluno__lista {
+  display: grid;
+  gap: var(--espaco-3);
+}
+
+.matriculas-aluno__item {
+  display: grid;
+  gap: var(--espaco-3);
+  padding: var(--espaco-4);
+  border: var(--borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.matriculas-aluno__topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--espaco-3);
+}
+
+.matriculas-aluno__topo h3 {
+  margin: 0 0 var(--espaco-1);
+}
+
+.matriculas-aluno__topo p {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+}
+
+.matriculas-aluno__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-1);
+  width: fit-content;
+  padding: var(--espaco-1) var(--espaco-3);
+  border-radius: 2rem;
+  font-size: var(--texto-pequeno);
+  font-weight: 700;
+}
+
+.matriculas-aluno__status--pendente {
+  color: #795500;
+  background: #fff1c2;
+}
+
+.matriculas-aluno__status--aceita {
+  color: #176b42;
+  background: #d9f5e5;
+}
+
+.matriculas-aluno__status--recusada {
+  color: #9b2525;
+  background: #fde1e1;
+}
+
+.matriculas-aluno__status--cancelada {
+  color: #51476a;
+  background: #e9e5f2;
+}
+
+.matriculas-aluno__detalhes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-2) var(--espaco-4);
+  color: var(--cor-tinta-suave);
+  font-size: var(--texto-pequeno);
+}
+
+.matriculas-aluno__detalhes strong {
+  color: var(--cor-tinta);
+}
+
+.matriculas-aluno__mensagem {
+  margin: 0;
+  padding: var(--espaco-3);
+  border-radius: var(--raio);
+  font-size: var(--texto-pequeno);
+}
+
+.matriculas-aluno__mensagem--pendente {
+  color: #795500;
+  background: #fff7dc;
+}
+
+.matriculas-aluno__mensagem--aceita {
+  color: #176b42;
+  background: #e5f7ec;
+}
+
+.matriculas-aluno__mensagem--recusada {
+  color: #9b2525;
+  background: #fdecec;
+}
+
+.matriculas-aluno__mensagem--recusada p {
+  margin: var(--espaco-1) 0 0;
+}
+
+.matriculas-aluno__vazio {
+  display: grid;
+  justify-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-8) var(--espaco-4);
+  border: 1px dashed var(--cor-borda);
+  border-radius: var(--raio);
+  text-align: center;
+  color: var(--cor-tinta-suave);
+}
+
+.matriculas-aluno__vazio strong {
+  color: var(--cor-tinta);
+}
+
+.matriculas-aluno__vazio p {
+  max-width: 32rem;
+  margin: 0;
+}
+
+.matriculas-aluno__vazio a {
+  color: var(--cor-link, var(--cor-quadro));
+  font-weight: 700;
+}

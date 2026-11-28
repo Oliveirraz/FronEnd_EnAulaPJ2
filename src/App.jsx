@@ -10,6 +10,7 @@ import CadastroProfessorPage from './features/cadastro/CadastroProfessorPage.jsx
 import EscolhaPerfilPage from './features/cadastro/EscolhaPerfilPage.jsx'
 import InicioPage from './features/inicio/InicioPage.jsx'
 import LoginPage from './features/login/LoginPage.jsx'
+import PerfilMatriculasAlunoPage from './features/perfil/PerfilMatriculasAlunoPage.jsx'
 
 import PerfilAulasPage from './features/perfil/PerfilAulasPage.jsx'
 import PerfilDadosPage from './features/perfil/PerfilDadosPage.jsx'
@@ -100,6 +101,12 @@ export default function App() {
             path="seguranca"
             element={<PerfilSegurancaAlunoPage />}
           />
+          
+          <Route
+            path="matriculas"
+            element={<PerfilMatriculasAlunoPage />}
+          />
+
         </Route>
 
         {/* Redirecionamento de endereço antigo */}

@@ -1,4 +1,8 @@
 
+/* =========================================
+   CONTAINER PRINCIPAL
+========================================= */
+
 .matriculas-aluno {
   width: 100%;
   max-width: 76rem;
@@ -14,6 +18,10 @@
   margin: 0;
   color: var(--cor-tinta-suave);
 }
+
+/* =========================================
+   CABEÇALHO E RESUMO
+========================================= */
 
 .matriculas-aluno__cabecalho {
   display: flex;
@@ -46,6 +54,72 @@
   min-width: 0;
 }
 
+/* =========================================
+   PESQUISA E FILTROS
+========================================= */
+
+.matriculas-aluno__ferramentas {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(13rem, 1fr);
+  gap: 1rem;
+  align-items: end;
+  padding: 1.25rem;
+  border: var(--borda);
+  border-radius: 0.85rem;
+  background: var(--cor-superficie);
+}
+
+.matriculas-aluno__pesquisa,
+.matriculas-aluno__filtro {
+  display: grid;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.matriculas-aluno__pesquisa label,
+.matriculas-aluno__filtro label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--cor-tinta);
+}
+
+.matriculas-aluno__pesquisa input,
+.matriculas-aluno__filtro select {
+  width: 100%;
+  min-width: 0;
+  height: 2.9rem;
+  padding: 0 0.9rem;
+  border: var(--borda);
+  border-radius: 0.6rem;
+  background: var(--cor-fundo);
+  color: var(--cor-tinta);
+  font: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.matriculas-aluno__pesquisa input:focus,
+.matriculas-aluno__filtro select:focus {
+  border-color: var(--cor-quadro);
+  box-shadow: 0 0 0 3px rgb(0 100 180 / 10%);
+}
+
+.matriculas-aluno__quantidade {
+  grid-column: 1 / -1;
+  padding-top: 0.85rem;
+  border-top: var(--borda);
+  color: var(--cor-tinta-suave);
+  font-size: 0.85rem;
+}
+
+.matriculas-aluno__quantidade strong {
+  color: var(--cor-tinta);
+}
+
+/* =========================================
+   LISTA DE MATRÍCULAS
+========================================= */
+
 .matriculas-aluno__lista {
   display: grid;
   gap: var(--espaco-3);
@@ -58,6 +132,12 @@
   border: var(--borda);
   border-radius: var(--raio);
   background: var(--cor-superficie);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.matriculas-aluno__item:hover {
+  border-color: var(--cor-quadro);
+  box-shadow: 0 3px 12px rgb(0 0 0 / 5%);
 }
 
 .matriculas-aluno__topo {
@@ -70,12 +150,17 @@
 
 .matriculas-aluno__topo h3 {
   margin: 0 0 var(--espaco-1);
+  color: var(--cor-tinta);
 }
 
 .matriculas-aluno__topo p {
   margin: 0;
   color: var(--cor-tinta-suave);
 }
+
+/* =========================================
+   STATUS DAS MATRÍCULAS
+========================================= */
 
 .matriculas-aluno__status {
   display: inline-flex;
@@ -108,6 +193,10 @@
   background: #e9e5f2;
 }
 
+/* =========================================
+   DETALHES DA MATRÍCULA
+========================================= */
+
 .matriculas-aluno__detalhes {
   display: flex;
   flex-wrap: wrap;
@@ -120,11 +209,16 @@
   color: var(--cor-tinta);
 }
 
+/* =========================================
+   MENSAGENS DE STATUS
+========================================= */
+
 .matriculas-aluno__mensagem {
   margin: 0;
   padding: var(--espaco-3);
   border-radius: var(--raio);
   font-size: var(--texto-pequeno);
+  line-height: 1.5;
 }
 
 .matriculas-aluno__mensagem--pendente {
@@ -145,6 +239,15 @@
 .matriculas-aluno__mensagem--recusada p {
   margin: var(--espaco-1) 0 0;
 }
+
+.matriculas-aluno__mensagem--cancelada {
+  color: #51476a;
+  background: #e9e5f2;
+}
+
+/* =========================================
+   ESTADO VAZIO
+========================================= */
 
 .matriculas-aluno__vazio {
   display: grid;
@@ -169,4 +272,430 @@
 .matriculas-aluno__vazio a {
   color: var(--cor-link, var(--cor-quadro));
   font-weight: 700;
+}
+
+/* =========================================
+   PAGINAÇÃO
+========================================= */
+
+.matriculas-aluno__paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 0;
+  margin-top: 0.25rem;
+  border-top: var(--borda);
+}
+
+.matriculas-aluno__paginacao button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 6.5rem;
+  min-height: 2.65rem;
+  padding: 0.5rem 1rem;
+  border: var(--borda);
+  border-radius: 0.6rem;
+  background: var(--cor-superficie);
+  color: var(--cor-tinta);
+  font-size: 0.875rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.matriculas-aluno__paginacao button:hover:not(:disabled) {
+  border-color: var(--cor-quadro);
+  color: var(--cor-quadro);
+  background: var(--cor-fundo);
+}
+
+.matriculas-aluno__paginacao button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.matriculas-aluno__paginas {
+  color: var(--cor-tinta-suave);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.matriculas-aluno__paginas strong {
+  color: var(--cor-tinta);
+}
+
+/* =========================================
+   BOTÃO DE CANCELAMENTO
+========================================= */
+
+.matriculas-aluno__acoes {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--espaco-2);
+  border-top: var(--borda);
+}
+
+.matriculas-aluno__botao-cancelar {
+  width: auto;
+  min-width: 0;
+  color: #a52c2c;
+}
+
+.matriculas-aluno__botao-cancelar:hover {
+  background: #fff0f0;
+}
+
+/* =========================================
+   MENSAGEM DE SUCESSO
+========================================= */
+
+.matriculas-aluno__sucesso {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-3);
+  border-radius: var(--raio);
+  color: #176b42;
+  background: #e5f7ec;
+  font-size: var(--texto-pequeno);
+}
+
+.matriculas-aluno__sucesso span {
+  flex: 1;
+}
+
+.matriculas-aluno__sucesso button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* =========================================
+   FUNDO DO MODAL
+========================================= */
+
+.matricula-cancelamento__fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  overflow-y: auto;
+  background: rgb(0 0 0 / 55%);
+  backdrop-filter: blur(3px);
+}
+
+/* =========================================
+   MODAL
+========================================= */
+
+.matricula-cancelamento__modal {
+  position: relative;
+  width: min(46rem, calc(100vw - 2.5rem));
+  max-width: 46rem;
+  max-height: min(90dvh, 52rem);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 2rem 2.1rem 1.6rem;
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  box-shadow: 0 1rem 3rem rgb(0 0 0 / 20%);
+  animation: aparecer-modal 0.2s ease;
+}
+
+@keyframes aparecer-modal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.matricula-cancelamento__cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.matricula-cancelamento__icone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  color: #a52c2c;
+  background: #fdecec;
+}
+
+.matricula-cancelamento__fechar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.3rem;
+  height: 2.3rem;
+  border: 0;
+  border-radius: 50%;
+  color: var(--cor-tinta-suave);
+  background: transparent;
+  cursor: pointer;
+}
+
+.matricula-cancelamento__fechar:hover {
+  background: var(--cor-fundo);
+}
+
+.matricula-cancelamento__modal h2 {
+  margin: 0 0 var(--espaco-2);
+  color: var(--cor-tinta);
+  font-size: clamp(1.35rem, 2.5vw, 1.65rem);
+  letter-spacing: -0.02em;
+}
+
+.matricula-cancelamento__descricao {
+  max-width: 39rem;
+  margin: 0 0 1.35rem;
+  color: var(--cor-tinta-suave);
+  font-size: 0.96rem;
+  line-height: 1.6;
+}
+
+/* =========================================
+   INFORMAÇÕES DA AULA
+========================================= */
+
+.matricula-cancelamento__aula {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
+  gap: 0.9rem 1.25rem;
+  padding: 1.25rem 1.35rem;
+  border: var(--borda);
+  border-radius: 1rem;
+  background: var(--cor-fundo);
+  margin-bottom: 1.5rem;
+}
+
+.matricula-cancelamento__aula strong {
+  grid-column: 1 / -1;
+  color: var(--cor-tinta);
+  font-size: 1.08rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.matricula-cancelamento__aula span {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  min-width: 0;
+  color: var(--cor-tinta-suave);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.matricula-cancelamento__aula span:nth-of-type(1) {
+  grid-column: 1 / -1;
+}
+
+.matricula-cancelamento__aula span svg {
+  flex: 0 0 auto;
+  color: var(--cor-quadro);
+}
+
+/* =========================================
+   CONDIÇÕES DE CANCELAMENTO
+========================================= */
+
+.matricula-cancelamento__condicoes {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.35rem;
+}
+
+.matricula-cancelamento__condicoes h3 {
+  margin: 0 0 0.1rem;
+  font-size: 1.08rem;
+  color: var(--cor-tinta);
+}
+
+.matricula-cancelamento__condicoes > p {
+  margin: 0;
+  color: var(--cor-tinta-suave);
+  font-size: 0.9rem;
+  line-height: 1.65;
+}
+
+.matricula-cancelamento__dentro-prazo,
+.matricula-cancelamento__alerta {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.1rem;
+  border-radius: 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
+}
+
+.matricula-cancelamento__dentro-prazo {
+  color: #176b42;
+  background: #e5f7ec;
+}
+
+.matricula-cancelamento__alerta {
+  color: #795500;
+  background: #fff1c2;
+}
+
+.matricula-cancelamento__dentro-prazo svg,
+.matricula-cancelamento__alerta svg {
+  flex-shrink: 0;
+}
+
+.matricula-cancelamento__condicoes .matricula-cancelamento__observacao {
+  padding: 0.8rem 1rem;
+  border-left: 3px solid var(--cor-borda);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: var(--cor-tinta-suave);
+}
+
+/* =========================================
+   BOTÕES DO MODAL
+========================================= */
+
+.matricula-cancelamento__botoes {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding-top: 1.15rem;
+  margin-top: 0.25rem;
+  border-top: var(--borda);
+}
+
+.matricula-cancelamento__botoes .botao {
+  width: auto;
+  min-width: 0;
+  min-height: 2.85rem;
+  padding-inline: 1.25rem;
+}
+
+.matricula-aluno__confirmar-cancelamento {
+  color: #fff;
+  background: #a52c2c;
+  border-color: #a52c2c;
+}
+
+.matricula-aluno__confirmar-cancelamento:hover:not(:disabled) {
+  color: #fff;
+  background: #842020;
+}
+
+/* =========================================
+   RESPONSIVIDADE
+========================================= */
+
+@media (max-width: 768px) {
+  .matriculas-aluno__ferramentas {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .matriculas-aluno__quantidade {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .matriculas-aluno__cabecalho {
+    align-items: stretch;
+  }
+
+  .matriculas-aluno__cabecalho .botao {
+    width: 100%;
+  }
+
+  .matriculas-aluno__resumo {
+    width: 100%;
+  }
+
+  .matriculas-aluno__topo {
+    flex-direction: column;
+  }
+
+  .matriculas-aluno__paginacao {
+    gap: 0.5rem;
+  }
+
+  .matriculas-aluno__paginacao button {
+    min-width: 5.5rem;
+    padding-inline: 0.6rem;
+  }
+
+  .matriculas-aluno__paginas {
+    font-size: 0.8rem;
+  }
+
+  .matricula-cancelamento__modal {
+    width: min(100%, 34rem);
+    max-height: calc(100dvh - 1.25rem);
+    padding: 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .matricula-cancelamento__aula {
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  .matricula-cancelamento__botoes {
+    flex-direction: column-reverse;
+  }
+
+  .matricula-cancelamento__botoes .botao {
+    width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  .matricula-cancelamento__aula {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .matricula-cancelamento__aula strong,
+  .matricula-cancelamento__aula span:nth-of-type(1) {
+    grid-column: auto;
+  }
+}
+
+@media (max-height: 650px) and (min-width: 601px) {
+  .matricula-cancelamento__modal {
+    max-height: calc(100dvh - 1.5rem);
+    padding-block: 1.25rem;
+  }
+
+  .matricula-cancelamento__aula {
+    gap: 0.65rem 1rem;
+    padding-block: 0.9rem;
+    margin-bottom: 1rem;
+  }
+
+  .matricula-cancelamento__condicoes {
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
 }

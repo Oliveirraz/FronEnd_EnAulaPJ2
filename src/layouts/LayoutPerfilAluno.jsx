@@ -1,17 +1,20 @@
-// src/layouts/LayoutPerfilAluno.jsx
 
 import { IconLogout } from '@tabler/icons-react'
 import { Outlet, useNavigate } from 'react-router-dom'
+
 import Avatar from '../components/ui/Avatar.jsx'
 import Button from '../components/ui/Button.jsx'
 import NavegacaoAbas from '../components/ui/NavegacaoAbas.jsx'
+
 import { lerSessao, limparSessao } from '../services/sessao.js'
+
 import './LayoutPerfil.css'
 import useAluno from '../hooks/useAluno.js'
 
 const ABAS = [
   { para: 'dados', texto: 'Dados' },
   { para: 'buscar-aulas', texto: 'Buscar aulas' },
+  { para: 'matriculas', texto: 'Minhas matrículas' },
   { para: 'aulas', texto: 'Aulas' },
   { para: 'materiais', texto: 'Materiais' },
   { para: 'seguranca', texto: 'Segurança' },
@@ -32,27 +35,33 @@ export default function LayoutPerfilAluno() {
 
   return (
     <div className="layout-perfil">
+
       <aside
         className="layout-perfil__painel layout-perfil__painel--gradiente fundo-quadro"
         aria-label="Resumo do perfil"
       >
+
         <Avatar
           key={aluno?.fotoUrl ?? 'sem-foto'}
           src={aluno?.fotoUrl}
         />
 
         <div className="layout-perfil__identidade">
+
           <p className="layout-perfil__nome">
             {aluno?.nome ?? sessao.nome}
           </p>
 
           <p className="layout-perfil__tipo">
-            <span className="layout-perfil__selo">Aluno</span>
+            <span className="layout-perfil__selo">
+              Aluno
+            </span>
           </p>
 
           <p className="layout-perfil__email">
             {aluno?.email ?? sessao.email}
           </p>
+
         </div>
 
         <Button
@@ -61,12 +70,17 @@ export default function LayoutPerfilAluno() {
           onClick={sair}
         >
           <IconLogout size="1.25rem" aria-hidden="true" />
-          <span className="layout-perfil__sair-texto">Sair</span>
+          <span className="layout-perfil__sair-texto">
+            Sair
+          </span>
         </Button>
+
       </aside>
 
       <div className="layout-perfil__area">
+
         <div className="layout-perfil__miolo">
+
           <NavegacaoAbas
             rotulo="Seções do perfil"
             itens={ABAS}
@@ -75,8 +89,11 @@ export default function LayoutPerfilAluno() {
           <main>
             <Outlet context={dadosDoAluno} />
           </main>
+
         </div>
+
       </div>
+
     </div>
   )
 }

@@ -468,6 +468,49 @@ export function listarMinhasMatriculas() {
   return requisicaoAutenticada('/api/matriculas/minhas')
 }
 
+
+
+/**
+ * HU21 - Aluno cancela sua própria matrícula.
+ *
+ * O backend verifica:
+ * - Se a matrícula pertence ao aluno.
+ * - Se ainda pode ser cancelada.
+ * - Se está dentro do prazo para reembolso.
+ */
+export async function cancelarMatricula(matriculaId) {
+  if (!matriculaId) {
+    throw new Error('Informe a matrícula que deseja cancelar.')
+  }
+
+  const token = lerSessao()?.token
+
+  const resposta = await fetch(
+    `${API_URL}/api/matriculas/${encodeURIComponent(matriculaId)}/cancelar`,
+    {
+      method: 'PATCH',
+      headers: {
+        ...(token
+          ? { Authorization: `Bearer ${token}` }
+          : {}),
+      },
+    }
+  )
+
+  if (!resposta.ok) {
+    const texto = await resposta.text().catch(() => '')
+
+    throw new ApiError(
+      resposta.status,
+      texto.trim() || 'Não foi possível cancelar a matrícula.'
+    )
+  }
+
+  // O BackEnd retorna uma mensagem String, não um objeto JSON.
+  return resposta.text()
+}
+
+
 // =====================================================
 // GERENCIAMENTO DE MATRÍCULAS - HU11
 // =====================================================

@@ -1,20 +1,33 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+
 import {
   IconRefresh,
   IconClock,
   IconCircleCheck,
   IconCircleX,
   IconBook2,
+  IconCalendarEvent,
+  IconAlertTriangle,
+  IconX,
+  IconBan,
 } from '@tabler/icons-react'
 
 import Aviso from '../../components/ui/Aviso.jsx'
 import Button from '../../components/ui/Button.jsx'
 import CartaoSecao from '../../components/ui/CartaoSecao.jsx'
-import { listarMinhasMatriculas } from '../../services/api.js'
+
+import {
+  listarMinhasMatriculas,
+  cancelarMatricula,
+} from '../../services/api.js'
 
 import './PerfilMatriculasAlunoPage.css'
+
+// Deve acompanhar enaula.cancelamento.horas-antecedencia
+// configurado no application.properties do BackEnd.
+const HORAS_ANTECEDENCIA = 24
 
 function normalizarLista(resultado) {
   if (Array.isArray(resultado)) return resultado
@@ -22,6 +35,7 @@ function normalizarLista(resultado) {
   if (Array.isArray(resultado?.data)) return resultado.data
   if (Array.isArray(resultado?.matriculas)) return resultado.matriculas
   if (Array.isArray(resultado?.resultados)) return resultado.resultados
+
   return []
 }
 
@@ -44,12 +58,12 @@ function statusNormalizado(status) {
 }
 
 function rotuloStatus(status) {
-  return ({
+  return {
     PENDENTE: 'Pendente',
     ACEITA: 'Matrícula aceita',
     RECUSADA: 'Matrícula recusada',
     CANCELADA: 'Cancelada',
-  })[status] || 'Pendente'
+  }[status] || 'Pendente'
 }
 
 function formatarData(valor) {
@@ -61,7 +75,6 @@ function formatarData(valor) {
 
   return data.toLocaleDateString('pt-BR')
 }
-
 
 function dadosAula(matricula) {
   const aula = matricula.aula || matricula.dadosAula || {}
@@ -101,7 +114,6 @@ function dadosAula(matricula) {
   }
 }
 
-
 function formatarValor(valor) {
   if (valor == null || valor === '') {
     return 'Valor não informado'
@@ -125,11 +137,81 @@ function dataSolicitacao(matricula) {
   )
 }
 
+// Calcula a data e o horário de início da aula.
+function obterInicioAula(aula) {
+  if (!aula.data || !aula.horario) return null
+
+  const data = String(aula.data).slice(0, 10)
+  const horario = String(aula.horario).slice(0, 8)
+
+  const inicio = new Date(`${data}T${horario}`)
+
+  return Number.isNaN(inicio.getTime()) ? null : inicio
+}
+
+// Verifica as condições de cancelamento.
+// O BackEnd continua sendo responsável pela decisão definitiva.
+function verificarPrazo(aula) {
+  const inicio = obterInicioAula(aula)
+
+  if (!inicio) {
+    return {
+      permitido: false,
+      calculado: false,
+      reembolso: false,
+      mensagem: 'Não foi possível identificar a data e o horário da aula.',
+    }
+  }
+
+  const agora = new Date()
+
+  if (agora >= inicio) {
+    return {
+      permitido: false,
+      calculado: true,
+      reembolso: false,
+      mensagem: 'A aula já começou. Não é mais possível cancelar a matrícula.',
+    }
+  }
+
+  const limite = new Date(
+    inicio.getTime() - HORAS_ANTECEDENCIA * 60 * 60 * 1000
+  )
+
+  const dentroDoPrazo = agora <= limite
+
+  return {
+    permitido: true,
+    calculado: true,
+    reembolso: dentroDoPrazo,
+    inicio,
+    limite,
+    mensagem: dentroDoPrazo
+      ? `O cancelamento está dentro do prazo de ${HORAS_ANTECEDENCIA} horas previsto para reembolso.`
+      : `O cancelamento está fora do prazo de ${HORAS_ANTECEDENCIA} horas. Não haverá reembolso.`,
+  }
+}
+
 export default function PerfilMatriculasAlunoPage() {
   const [matriculas, setMatriculas] = useState([])
+
   const [carregando, setCarregando] = useState(true)
   const [atualizando, setAtualizando] = useState(false)
+
   const [erro, setErro] = useState('')
+  const [mensagemSucesso, setMensagemSucesso] = useState('')
+
+  // Matrícula selecionada para cancelamento.
+  const [matriculaSelecionada, setMatriculaSelecionada] = useState(null)
+
+  // Estado de carregamento do cancelamento.
+  const [cancelando, setCancelando] = useState(false)
+
+  const [erroCancelamento, setErroCancelamento] = useState('')
+
+  // =========================================
+  // CARREGAR MATRÍCULAS
+  // =========================================
 
   const carregarMatriculas = useCallback(async (silencioso = false) => {
     if (silencioso) {
@@ -159,7 +241,7 @@ export default function PerfilMatriculasAlunoPage() {
     } catch (error) {
       setErro(
         error.message ||
-        'Não foi possível consultar suas matrículas. Tente novamente.'
+        'Não foi possível consultar suas matrículas.'
       )
     } finally {
       setCarregando(false)
@@ -170,13 +252,16 @@ export default function PerfilMatriculasAlunoPage() {
   useEffect(() => {
     carregarMatriculas()
 
-    // Atualiza automaticamente a situação da matrícula.
     const intervalo = window.setInterval(() => {
       carregarMatriculas(true)
     }, 30000)
 
     return () => window.clearInterval(intervalo)
   }, [carregarMatriculas])
+
+  // =========================================
+  // RESUMO DAS MATRÍCULAS
+  // =========================================
 
   const resumo = useMemo(() => {
     return matriculas.reduce((total, item) => {
@@ -187,21 +272,124 @@ export default function PerfilMatriculasAlunoPage() {
     }, {})
   }, [matriculas])
 
+  // =========================================
+  // ABRIR TELA DE CONFIRMAÇÃO
+  // =========================================
+
+  function abrirConfirmacao(matricula) {
+    setMatriculaSelecionada(matricula)
+    setErroCancelamento('')
+    setMensagemSucesso('')
+  }
+
+  // =========================================
+  // FECHAR TELA DE CONFIRMAÇÃO
+  // =========================================
+
+  function fecharConfirmacao() {
+    if (cancelando) return
+
+    setMatriculaSelecionada(null)
+    setErroCancelamento('')
+  }
+
+  // =========================================
+  // CONFIRMAR CANCELAMENTO
+  // =========================================
+
+  async function confirmarCancelamento() {
+    if (!matriculaSelecionada || cancelando) return
+
+    const status = statusNormalizado(matriculaSelecionada.status)
+
+    if (!['PENDENTE', 'ACEITA'].includes(status)) {
+      setErroCancelamento(
+        'Esta matrícula não permite mais cancelamento.'
+      )
+      return
+    }
+
+    const aula = dadosAula(matriculaSelecionada)
+    const condicao = verificarPrazo(aula)
+
+    if (!condicao.permitido) {
+      setErroCancelamento(condicao.mensagem)
+      return
+    }
+
+    setCancelando(true)
+    setErroCancelamento('')
+
+    try {
+      const resposta = await cancelarMatricula(
+        matriculaSelecionada.id
+      )
+
+      // Atualiza o status imediatamente na interface.
+      setMatriculas((listaAtual) =>
+        listaAtual.map((item) =>
+          item.id === matriculaSelecionada.id
+            ? {
+                ...item,
+                status: 'CANCELADA',
+                statusExibicao: 'CANCELADA',
+                dataDecisao: new Date().toISOString(),
+              }
+            : item
+        )
+      )
+
+      setMensagemSucesso(
+        resposta || 'Sua matrícula foi cancelada com sucesso.'
+      )
+
+      setMatriculaSelecionada(null)
+
+    } catch (error) {
+      setErroCancelamento(
+        error.message ||
+        'Não foi possível cancelar sua matrícula.'
+      )
+    } finally {
+      setCancelando(false)
+    }
+  }
+
   return (
     <>
       <title>Minhas matrículas | EnAula</title>
 
       <main className="matriculas-aluno">
+
         <CartaoSecao titulo="Minhas matrículas">
 
           <div className="matriculas-aluno__conteudo">
 
             <p className="matriculas-aluno__descricao">
-              Acompanhe suas solicitações e veja quando o professor
-              confirmar ou recusar sua participação nas aulas.
+              Acompanhe suas solicitações, consulte os detalhes
+              das aulas e gerencie seus cancelamentos.
             </p>
 
-            {erro && <Aviso tipo="erro">{erro}</Aviso>}
+            {erro && (
+              <Aviso tipo="erro">{erro}</Aviso>
+            )}
+
+            {mensagemSucesso && (
+              <div
+                className="matriculas-aluno__sucesso"
+                role="status"
+              >
+                <IconCircleCheck size="1.3rem" />
+                <span>{mensagemSucesso}</span>
+                <button
+                  type="button"
+                  aria-label="Fechar mensagem"
+                  onClick={() => setMensagemSucesso('')}
+                >
+                  <IconX size="1rem" />
+                </button>
+              </div>
+            )}
 
             <div className="matriculas-aluno__cabecalho">
 
@@ -224,6 +412,10 @@ export default function PerfilMatriculasAlunoPage() {
                 <span>
                   <strong>{resumo.RECUSADA || 0}</strong> recusadas
                 </span>
+
+                <span>
+                  <strong>{resumo.CANCELADA || 0}</strong> canceladas
+                </span>
               </div>
 
               <Button
@@ -239,9 +431,11 @@ export default function PerfilMatriculasAlunoPage() {
             </div>
 
             {carregando ? (
+
               <p role="status">
                 Carregando suas solicitações...
               </p>
+
             ) : matriculas.length === 0 ? (
 
               <div className="matriculas-aluno__vazio">
@@ -254,7 +448,7 @@ export default function PerfilMatriculasAlunoPage() {
 
                 <p>
                   Quando solicitar participação em uma aula,
-                  ela aparecerá aqui com o status Pendente.
+                  ela aparecerá aqui.
                 </p>
 
                 <Link to="/aluno/perfil/buscar-aulas">
@@ -277,21 +471,23 @@ export default function PerfilMatriculasAlunoPage() {
                       ? IconCircleCheck
                       : status === 'RECUSADA'
                         ? IconCircleX
-                        : IconClock
+                        : status === 'CANCELADA'
+                          ? IconBan
+                          : IconClock
 
                   const motivo =
                     matricula.motivoRecusa ||
                     matricula.motivo ||
                     matricula.justificativaRecusa
 
+                  const podeCancelar =
+                    status === 'PENDENTE' || status === 'ACEITA'
+
                   return (
 
                     <article
                       className="matriculas-aluno__item"
-                      key={
-                        matricula.id ??
-                        `${matricula.aulaId}-${dataSolicitacao(matricula)}`
-                      }
+                      key={matricula.id}
                     >
 
                       <div className="matriculas-aluno__topo">
@@ -361,8 +557,8 @@ export default function PerfilMatriculasAlunoPage() {
 
                       {status === 'ACEITA' && (
                         <p className="matriculas-aluno__mensagem matriculas-aluno__mensagem--aceita">
-                          Boa notícia! O professor aceitou sua
-                          matrícula. Você já pode se preparar para a aula.
+                          O professor aceitou sua matrícula.
+                          Você já pode se preparar para a aula.
                         </p>
                       )}
 
@@ -380,16 +576,204 @@ export default function PerfilMatriculasAlunoPage() {
                         </div>
                       )}
 
+                      {status === 'CANCELADA' && (
+                        <p className="matriculas-aluno__mensagem matriculas-aluno__mensagem--cancelada">
+                          Esta matrícula foi cancelada.
+                        </p>
+                      )}
+
+                      {podeCancelar && (
+
+                        <div className="matriculas-aluno__acoes">
+
+                          <Button
+                            variante="contorno"
+                            className="matriculas-aluno__botao-cancelar"
+                            onClick={() => abrirConfirmacao(matricula)}
+                          >
+                            <IconBan size="1.1rem" />
+                            Cancelar matrícula
+                          </Button>
+
+                        </div>
+
+                      )}
+
                     </article>
                   )
                 })}
 
               </div>
+
             )}
 
           </div>
+
         </CartaoSecao>
+
       </main>
+
+      {/* =====================================
+          MODAL DE CONFIRMAÇÃO - HU21
+      ====================================== */}
+
+      {matriculaSelecionada && (() => {
+
+        const aula = dadosAula(matriculaSelecionada)
+        const condicao = verificarPrazo(aula)
+
+        return (
+
+          <div
+            className="matricula-cancelamento__fundo"
+            onClick={fecharConfirmacao}
+          >
+
+            <section
+              className="matricula-cancelamento__modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="titulo-cancelamento"
+              onClick={(event) => event.stopPropagation()}
+            >
+
+              <div className="matricula-cancelamento__cabecalho">
+
+                <div className="matricula-cancelamento__icone">
+                  <IconAlertTriangle size="1.8rem" />
+                </div>
+
+                <button
+                  type="button"
+                  className="matricula-cancelamento__fechar"
+                  onClick={fecharConfirmacao}
+                  disabled={cancelando}
+                  aria-label="Fechar"
+                >
+                  <IconX size="1.3rem" />
+                </button>
+
+              </div>
+
+              <h2 id="titulo-cancelamento">
+                Cancelar matrícula?
+              </h2>
+
+              <p className="matricula-cancelamento__descricao">
+                Você está prestes a cancelar sua participação
+                nesta aula. Confira as condições antes de continuar.
+              </p>
+
+              <div className="matricula-cancelamento__aula">
+
+                <strong>{aula.materia}</strong>
+
+                <span>
+                  Professor: {aula.professor}
+                </span>
+
+                <span>
+                  <IconCalendarEvent size="1rem" />
+                  {formatarData(aula.data)}
+                </span>
+
+                <span>
+                  <IconClock size="1rem" />
+                  {aula.horario
+                    ? String(aula.horario).slice(0, 5)
+                    : 'Horário não informado'}
+                </span>
+
+                <span>
+                  Valor da aula: {formatarValor(aula.valor)}
+                </span>
+
+              </div>
+
+              <div className="matricula-cancelamento__condicoes">
+
+                <h3>Condições de cancelamento</h3>
+
+                <p>
+                  <strong>Prazo:</strong> o cancelamento deve
+                  respeitar a antecedência configurada de{' '}
+                  {HORAS_ANTECEDENCIA} horas para ter direito
+                  ao reembolso previsto na regra.
+                </p>
+
+                {!condicao.calculado ? (
+
+                  <div className="matricula-cancelamento__alerta">
+                    <IconAlertTriangle size="1.2rem" />
+                    <span>{condicao.mensagem}</span>
+                  </div>
+
+                ) : !condicao.permitido ? (
+
+                  <div className="matricula-cancelamento__alerta">
+                    <IconAlertTriangle size="1.2rem" />
+                    <span>{condicao.mensagem}</span>
+                  </div>
+
+                ) : condicao.reembolso ? (
+
+                  <div className="matricula-cancelamento__dentro-prazo">
+                    <IconCircleCheck size="1.2rem" />
+                    <span>{condicao.mensagem}</span>
+                  </div>
+
+                ) : (
+
+                  <div className="matricula-cancelamento__alerta">
+                    <IconAlertTriangle size="1.2rem" />
+                    <span>{condicao.mensagem}</span>
+                  </div>
+
+                )}
+
+                <p className="matricula-cancelamento__observacao">
+                  O sistema registra o cancelamento e informa
+                  a condição de reembolso. O processamento de
+                  eventual estorno financeiro não é realizado
+                  por este endpoint.
+                </p>
+
+              </div>
+
+              {erroCancelamento && (
+                <Aviso tipo="erro">
+                  {erroCancelamento}
+                </Aviso>
+              )}
+
+              <div className="matricula-cancelamento__botoes">
+
+                <Button
+                  variante="contorno"
+                  onClick={fecharConfirmacao}
+                  disabled={cancelando}
+                >
+                  Voltar
+                </Button>
+
+                <Button
+                  onClick={confirmarCancelamento}
+                  disabled={!condicao.permitido || cancelando}
+                  carregando={cancelando}
+                  className="matricula-aluno__confirmar-cancelamento"
+                >
+                  Confirmar cancelamento
+                </Button>
+
+              </div>
+
+            </section>
+
+          </div>
+
+        )
+      })()}
+
     </>
   )
 }
